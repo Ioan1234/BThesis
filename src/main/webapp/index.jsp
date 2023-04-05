@@ -6,6 +6,51 @@
   <meta charset="utf-8">
   <title> Sign in</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <style>
+    .loader-container {
+      position: fixed;
+      display: none;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 9999;
+    }
+
+    .loader {
+      border: 16px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 16px solid #3498db;
+      width: 120px;
+      height: 120px;
+      -webkit-animation: spin 2s linear infinite;
+      animation: spin 2s linear infinite;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -60px 0 0 -60px;
+    }
+
+    @-webkit-keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+      }
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+
 </head>
 
 <%@page import="java.util.*"%>
@@ -16,6 +61,8 @@
 <%@ page import = "org.json.simple.parser.JSONParser" %>
 <%@ page import = "org.json.simple.parser.*" %>
 <%@page import="java.io.FileReader"%>
+<%@page import="jakarta.servlet.http.HttpSession"%>
+
 
 <%
 
@@ -48,6 +95,7 @@
 
 <%
   String msg = "";
+
 
   if ("POST".equals(request.getMethod())) {
 
@@ -99,30 +147,10 @@
       PreparedStatement stmt = null;
       try {
         stmt = conn.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS);
-      } catch (SQLException e) {
-        throw new RuntimeException(e);
-      }
-      try {
         stmt.setString(1, surname);
-      } catch (SQLException e) {
-        throw new RuntimeException(e);
-      }
-      try {
         stmt.setString(2, name);
-      } catch (SQLException e) {
-        throw new RuntimeException(e);
-      }
-      try {
         stmt.setString(3, email);
-      } catch (SQLException e) {
-        throw new RuntimeException(e);
-      }
-      try {
         stmt.setString(4, password);
-      } catch (SQLException e) {
-        throw new RuntimeException(e);
-      }
-      try {
         stmt.executeUpdate();
         ResultSet rs = stmt.getGeneratedKeys();
         if (rs.next()) {
@@ -133,8 +161,16 @@
         throw new RuntimeException(e);
       }
       msg = "Authentication successful.";
-    }
 
+      HttpSession session1 = request.getSession();
+      session1.setAttribute("user", email);
+
+      out.print("<div id='loader' style='display:none;'><h3>Authentication successful. Redirecting you to the news page...</h3></div>");
+      String redirectTo = (String) request.getSession().getAttribute("lastPageBeforeLogin");
+
+      out.print("<script>document.getElementById('loader').style.display = 'block'; setTimeout(function() { window.location.href = '" + redirectTo + "'; }, 2000);</script>");
+
+    }
   }
 %>
 <body>
@@ -175,6 +211,13 @@
                 <div class="d-flex justify-content-center">
                   <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body" name="submit">Register</button>
                 </div>
+                <div class="loader-container" id="loader-container">
+                  <div class="loader"></div>
+                  <div class="text-center text-white" style="position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%);">
+                    Authentication successful. Redirecting you to the news page...
+                  </div>
+                </div>
+
 
                 <p class="text-center text-muted mt-5 mb-0">Already have an account? <a href="login.jsp" class="fw-bold text-body"><u>Login here</u></a></p>
                 <%
