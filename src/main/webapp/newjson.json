@@ -1,0 +1,6 @@
+{
+  "username": "root",
+  "password": "Goaga123",
+  "driver": "jdbc:mysql://localhost:3306/news_website",
+  "driverName": "com.mysql.cj.jdbc.Driver"
+}
