@@ -1,13 +1,4 @@
 <%@page session="true" %>
-<%
-    if (session.getAttribute("loggedIn") != null && session.getAttribute("loggedIn").equals(true)) {
-        // user is logged in, show the page content
-    } else {
-        // user is not logged in, redirect to the login page
-        response.sendRedirect("login.jsp");
-        return;
-    }
-%>
 
 <html>
 <head>
@@ -101,9 +92,8 @@
             {
                 msg="Authentication sucessful.";
                 found=true;
-                session.setAttribute("loggedIn", true); // set the session variable to indicate that the user is logged in
-
-                // rest of the code
+                session.setAttribute("loggedIn", true);
+                session.setAttribute("accountType", "user");
             }
         }
 
@@ -118,6 +108,7 @@
                     msg="Authentication sucessful.";
                     found=true;
                     session.setAttribute("loggedIn", true);
+                    session.setAttribute("accountType", "author");
 
                         break;
                     }
@@ -142,7 +133,8 @@
                             <h2 class="text-uppercase text-center mb-5">Login into your account: </h2>
 
                             <form  method="POST">
-                                <input type="hidden" name="from" value="<%= request.getHeader("Referer") != null ? request.getHeader("Referer") : "" %>">
+                                <input type="hidden" name="from" value="<%= request.getParameter("from") != null ? request.getParameter("from") : (request.getHeader("Referer") != null ? request.getHeader("Referer") : "") %>">
+
 
 
                                 <div class="form-outline mb-4">

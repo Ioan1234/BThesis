@@ -56,7 +56,8 @@
 <%
   String id = (String)request.getParameter("id");
   PreparedStatement ps = conn.prepareStatement("SELECT * FROM news WHERE news_id=" + id);
-  PreparedStatement comment = conn.prepareStatement("SELECT c.*, COUNT(cl.user_id) as like_count, GROUP_CONCAT(u.surname, ' ', u.name SEPARATOR ', ') as likers FROM comments c LEFT JOIN comment_likes cl ON c.comment_id = cl.comment_id LEFT JOIN users u ON cl.user_id = u.user_id WHERE c.news_id=" + id + " AND c.availability = 1 GROUP BY c.comment_id, c.date_posted_on ORDER BY c.date_posted_on DESC");
+  PreparedStatement comment = conn.prepareStatement("SELECT c.*, COUNT(cl.user_id) as like_count, GROUP_CONCAT(CASE WHEN u.surname IS NOT NULL THEN CONCAT(u.surname, ' ', u.name) WHEN a.surname IS NOT NULL THEN CONCAT(a.surname, ' ', a.name) END SEPARATOR ', ') as likers FROM comments c LEFT JOIN comment_likes cl ON c.comment_id = cl.comment_id LEFT JOIN users u ON cl.user_id = u.user_id LEFT JOIN authors a ON cl.user_id = a.author_id WHERE c.news_id=" + id + " AND c.availability = 1 GROUP BY c.comment_id, c.date_posted_on ORDER BY c.date_posted_on DESC");
+
 
   PreparedStatement totalComments = conn.prepareStatement("SELECT COUNT(*) FROM comments WHERE news_id=" + id + " AND availability = 1");
   ResultSet result = ps.executeQuery();
@@ -277,7 +278,7 @@
                 + "<td width=\"5%\"><button type=\"button\" class=\"btn btn-primary btn-sm\" onclick=\"likeComment(" + commentResult.getInt("comment_id") + ")\" title=\"" + likers + "\" " + (session.getAttribute("accountType") == null ? "disabled" : "") + ">" + buttonText + "</button></td>"
                 + "</tr>");
 
-        if (currentUserId == userId) {
+        if (currentUserId == userId && session.getAttribute("accountType").equals("user")) {
           out.println("<td width=\"5%\"><button type=\"button\" id=\"remove-" + commentResult.getInt("comment_id") + "\" class=\"btn btn-warning btn-sm\" onclick=\"deleteComment(" + commentResult.getInt("comment_id") + ")\">Remove</button></td>");
         } else {
           out.println("<td width=\"5%\"></td>");

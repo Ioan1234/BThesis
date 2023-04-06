@@ -59,7 +59,8 @@
 
                 <% if(session.getAttribute("accountType") == null) { %>
             <li class="nav-item">
-                <a class="nav-link" href="login.jsp?from=News.jsp">Login <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="login.jsp?from=<%= request.getRequestURI() %>">Login <span class="sr-only">(current)</span></a>
+
             </li>
                 <% } %>
 
