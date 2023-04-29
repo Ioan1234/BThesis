@@ -2,7 +2,7 @@
 <%@ page import = "org.json.simple.parser.JSONParser" %>
 <%@ page import = "org.json.simple.parser.ParseException" %>
 <%@page import="java.io.FileReader"%>
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.*" %><%@ page import="com.project.entities.DatabaseConnector"%><%@ page import="java.util.ArrayList"%><%@ page import="java.util.List"%>
 <%@page contentType="application/json" pageEncoding="UTF-8"%>
 
 <%
@@ -14,29 +14,7 @@
   int userId = Integer.parseInt(session.getAttribute("id").toString());
   int commentId = Integer.parseInt(request.getParameter("comment_id"));
 
-  JSONParser jsonParser = new JSONParser();
-  JSONObject jsonObject = null;
-  try {
-    jsonObject = (JSONObject) jsonParser.parse(new FileReader("C:/Users/gogul/IdeaProjects/project/src/main/webapp/newjson.json"));
-  } catch (ParseException e) {
-    throw new RuntimeException(e);
-  }
-
-  String User = (String) jsonObject.get("username");
-  String Pass = (String) jsonObject.get("password");
-  String Driver = (String) jsonObject.get("driverName");
-  String Drive = (String) jsonObject.get("driver");
-  try {
-    Class.forName(Driver);
-  } catch (ClassNotFoundException e) {
-    throw new RuntimeException(e);
-  }
-  Connection conn = null;
-  try {
-    conn = DriverManager.getConnection(Drive, User, Pass);
-  } catch (SQLException e) {
-    throw new RuntimeException(e);
-  }
+  Connection conn = DatabaseConnector.getConnection();
 
   JSONObject responseJson = new JSONObject();
   if (conn != null) {
@@ -65,7 +43,15 @@
     ResultSet countLikesResult = countLikes.executeQuery();
 
     if (countLikesResult.next()) {
-      responseJson.put("likes_count", countLikesResult.getInt("likes_count"));
+      PreparedStatement getLikers = conn.prepareStatement("SELECT u.surname, u.name FROM users u JOIN comment_likes cl ON u.user_id = cl.user_id WHERE cl.comment_id=?");
+getLikers.setInt(1, commentId);
+ResultSet getLikersResult = getLikers.executeQuery();
+
+List<String> likersList = new ArrayList<>();
+while (getLikersResult.next()) {
+    likersList.add(getLikersResult.getString("surname") + " " + getLikersResult.getString("name"));
+}
+responseJson.put("likers", String.join(", ", likersList));
     }
   }
 

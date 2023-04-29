@@ -12,39 +12,12 @@
 <%@ page import = "org.json.simple.parser.JSONParser" %>
 <%@ page import = "org.json.simple.parser.*" %>
 <%@page import="java.io.FileReader"%>
-
+<%@ page import="com.project.entities.DatabaseConnector" %>
 
 
 <%
+    Connection conn = DatabaseConnector.getConnection();
 
-    JSONParser jsonParser = new JSONParser();
-    JSONObject jsonObject = null;
-    try {
-        jsonObject = (JSONObject) jsonParser.parse(new FileReader("C:/Users/gogul/IdeaProjects/project/src/main/webapp/newjson.json"));
-    } catch (ParseException e) {
-        throw new RuntimeException(e);
-    }
-
-    String User = (String) jsonObject.get("username");
-    String Pass = (String) jsonObject.get("password");
-    String Driver = (String) jsonObject.get("driverName");
-    String Drive = (String) jsonObject.get("driver");
-    try {
-        Class.forName(Driver);
-    } catch (ClassNotFoundException e) {
-        throw new RuntimeException(e);
-    }
-    Connection conn = null;
-    try {
-        conn = DriverManager.getConnection(Drive, User, Pass);
-    } catch (SQLException e) {
-        throw new RuntimeException(e);
-    }
-
-
-%>
-
-<%
     String msg = "";
     boolean found = false;
 
@@ -68,21 +41,6 @@
             redirectPage = request.getParameter("from");
         }
 
-        String newsIdParam = "";
-        if (newsId != -1) {
-            newsIdParam = "?news_id=" + newsId;
-        }
-
-        if (redirectPage == null) {
-            String referer = request.getHeader("referer");
-            if (referer != null) {
-                int lastSlash = referer.lastIndexOf('/');
-                if (lastSlash != -1) {
-                    redirectPage = referer.substring(lastSlash + 1) + newsIdParam;
-                }
-            }
-        }
-
         PreparedStatement stmt = conn.prepareStatement("SELECT email, password FROM users");
         ResultSet rs = stmt.executeQuery();
 
@@ -90,7 +48,7 @@
         {
             if(rs.getString("email").equals(email) && rs.getString("password").equals(password))
             {
-                msg="Authentication sucessful.";
+                msg="Authentication successful.";
                 found=true;
                 session.setAttribute("loggedIn", true);
                 session.setAttribute("accountType", "user");
@@ -105,21 +63,63 @@
             {
                 if(authorListRESULT.getString("email").equals(email) && authorListRESULT.getString("password").equals(password))
                 {
-                    msg="Authentication sucessful.";
+                    msg="Authentication successful.";
                     found=true;
                     session.setAttribute("loggedIn", true);
                     session.setAttribute("accountType", "author");
-
-                        break;
-                    }
                 }
-
             }
+        }
         if (!found) {
             msg = "Wrong email or password!";
         }
     }
+
+    if (msg.equals("Authentication successful.")) {
+        session.setAttribute("email", email);
+        session.setAttribute("password", password);
+
+        if (session.getAttribute("accountType").equals("user")) {
+            PreparedStatement getID = conn.prepareStatement("SELECT user_id FROM users WHERE email=? AND password = ?");
+            getID.setString(1, email);
+            getID.setString(2, password);
+
+            ResultSet getIDRESULT = getID.executeQuery();
+
+            getIDRESULT.next();
+
+            int id = getIDRESULT.getInt(1);
+
+            session.setAttribute("id", id);
+
+            if (newsId != -1) {
+                response.sendRedirect("seeNews.jsp?id=" + newsId);
+            } else {
+                response.sendRedirect("News.jsp");
+            }
+
+        } else if (session.getAttribute("accountType").equals("author")) {
+            PreparedStatement getID = conn.prepareStatement("SELECT author_id FROM authors WHERE email=? AND password = ?");
+            getID.setString(1, email);
+            getID.setString(2, password);
+
+            ResultSet getIDRESULT = getID.executeQuery();
+
+            getIDRESULT.next();
+
+            int id = getIDRESULT.getInt(1);
+
+            session.setAttribute("id", id);
+
+            if (newsId != -1) {
+                response.sendRedirect("seeNews.jsp?id=" + newsId);
+            } else {
+                response.sendRedirect("News.jsp");
+            }
+        }
+    }
 %>
+
 
 <body>
 
@@ -133,7 +133,8 @@
                             <h2 class="text-uppercase text-center mb-5">Login into your account: </h2>
 
                             <form  method="POST">
-                                <input type="hidden" name="from" value="<%= request.getParameter("from") != null ? request.getParameter("from") : (request.getHeader("Referer") != null ? request.getHeader("Referer") : "") %>">
+                                <input type="hidden" name="from" value="News.jsp">
+
 
 
 

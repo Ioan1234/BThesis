@@ -6,31 +6,12 @@
 <%@ page import = "org.json.simple.parser.*" %>
 <%@page import="java.io.FileReader"%>
 <%@ page import = "java.sql.*"%>
+<%@ page import="java.util.Comparator" %>
+<%@ page import="java.util.Collections" %>
+<%@ page import="com.project.entities.DatabaseConnector" %>
 <%
 
-    JSONParser jsonParser = new JSONParser();
-    JSONObject jsonObject = null;
-    try {
-        jsonObject = (JSONObject) jsonParser.parse(new FileReader("C:/Users/gogul/IdeaProjects/project/src/main/webapp/newjson.json"));
-    } catch (ParseException e) {
-        throw new RuntimeException(e);
-    }
-
-    String User = (String) jsonObject.get("username");
-    String Pass = (String) jsonObject.get("password");
-    String Driver = (String) jsonObject.get("driverName");
-    String Drive = (String) jsonObject.get("driver");
-    try {
-        Class.forName(Driver);
-    } catch (ClassNotFoundException e) {
-        throw new RuntimeException(e);
-    }
-    Connection conn = null;
-    try {
-        conn = DriverManager.getConnection(Drive, User, Pass);
-    } catch (SQLException e) {
-        throw new RuntimeException(e);
-    }
+    Connection conn = DatabaseConnector.getConnection();
 
     PreparedStatement ps1 = conn.prepareStatement("SELECT COUNT(*) FROM authors");
 %>
@@ -52,61 +33,47 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-
             <li class="nav-item active">
                 <a class="nav-link" href="#">News <span class="sr-only">(current)</span></a>
             </li>
-
-                <% if(session.getAttribute("accountType") == null) { %>
-            <li class="nav-item">
-                <a class="nav-link" href="login.jsp?from=<%= request.getRequestURI() %>">Login <span class="sr-only">(current)</span></a>
-
+            <% if(session.getAttribute("accountType") == null){ %>
+            <li class="nav-item mx-3">
+                <a href="login.jsp?from=<%= request.getRequestURI() %>" class="btn btn-warning">Login</a>
             </li>
-                <% } %>
-
+            <% } %>
             <li class="nav-item mx-5">
                 <a class="nav-link text-warning" href="#">
+                    <%
 
-<%
-
-        if(session.getAttribute("accountType") == null)
-            out.println("<strong>Guest</strong>");
-        if(session.getAttribute("accountType") == "user")
-        {
-
-            String currentEmail = (String)session.getAttribute("email");
-
-            String sql = "SELECT * FROM users WHERE email = " + " '"+currentEmail+"'  ";
-
-            PreparedStatement findUser = conn.prepareStatement(sql);
+                        if(session.getAttribute("accountType") == null)
+                            out.println("<strong>Guest</strong>");
 
 
-            ResultSet findUserRESULT = findUser.executeQuery();
-            findUserRESULT.next();
+                        if (session.getAttribute("accountType") != null) {
 
-            out.println("<strong>" + findUserRESULT.getString("surname") + " " + findUserRESULT.getString("name") + " - " + session.getAttribute("accountType") + "</strong>");
-        }
+                            String currentEmail = (String) session.getAttribute("email");
 
-        if(session.getAttribute("accountType") == "author")
-        {
+                            //out.println("accountType: " + session.getAttribute("accountType"));
 
-            String currentEmail = (String)session.getAttribute("email");
+                            String sql = "SELECT * FROM " + session.getAttribute("accountType") + "s WHERE email = ?";
 
-            String sql = "SELECT * FROM authors WHERE email = " + " '"+currentEmail+"'  ";
+                            PreparedStatement findUser = conn.prepareStatement(sql);
+                            findUser.setString(1, currentEmail);
 
-            PreparedStatement findAuthor = conn.prepareStatement(sql);
+                            ResultSet findUserRESULT = findUser.executeQuery();
+                            findUserRESULT.next();
+
+                            out.println("<strong>" + findUserRESULT.getString("surname") + " " + findUserRESULT.getString("name") + " - " + session.getAttribute("accountType") + "</strong>");
+                        }
 
 
-            ResultSet findAuthorRESULT = findAuthor.executeQuery();
-            findAuthorRESULT.next();
 
-            out.println("<strong>" + findAuthorRESULT.getString("surname") + " " + findAuthorRESULT.getString("name") + " - " +session.getAttribute("accountType") + "</strong>");
-        }
-%>
+
+
+                    %>
 
                     <span class="sr-only">(current)</span></a>
             </li>
-
 
             <% if(session.getAttribute("accountType") != null){ %>
             <li class="nav-item mx-3">
@@ -116,6 +83,7 @@
         </ul>
     </div>
 </nav>
+
     <% if(session.getAttribute("accountType") == "author") { %>
 
 <div class="container mt-5 text-center">
@@ -138,16 +106,18 @@
 
         <jsp:useBean id="obj" class="com.project.entities.JavaBean"/>
         <%
-
             ArrayList<News> news = obj.getNews();
+            Collections.sort(news, new Comparator<News>() {
+                @Override
+                public int compare(News n1, News n2) {
+                    return n2.getNewsPostedOn().compareTo(n1.getNewsPostedOn());
+                }
+            });
 
-            for(News n : news){
-
+            for (News n : news) {
                 PreparedStatement categoryName = conn.prepareStatement("SELECT category_name FROM categories WHERE category_id = " + n.getCategoryId());
                 ResultSet categoryNameRESULT = categoryName.executeQuery();
-
                 categoryNameRESULT.next();
-
 
                 try {
                     out.println(
@@ -155,7 +125,7 @@
                                     "<th>" + n.getNewsTitle() + "</th>" +
                                     "<th>" + n.getNewsPostedOn() + "</th>" +
                                     "<th>" + categoryNameRESULT.getString(1) + "</th>" +
-                                    "<th><a href=\"seeNews.jsp?id= "+ n.getNewsId() +"\"><button class=\"btn bg-main text-white\">View</button></a></th>" +
+                                    "<th><a href=\"seeNews.jsp?id= " + n.getNewsId() + "\"><button class=\"btn bg-main text-white\">View</button></a></th>" +
                                     "</tr>"
                     );
                 } catch (SQLException e) {
@@ -163,6 +133,7 @@
                 }
             }
         %>
+
 
         </tbody>
     </table>

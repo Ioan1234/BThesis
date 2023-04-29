@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dataSource name="@localhost">
+<dataSource name="news_website@localhost [2]">
   <database-model serializer="dbm" dbms="MYSQL" family-id="MYSQL" format-version="4.48">
     <root id="1">
       <DefaultCasing>lower/lower</DefaultCasing>
@@ -1000,6 +1000,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="290" parent="1" name="news_website">
+      <Current>1</Current>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="291" parent="1" name="performance_schema">
@@ -1086,7 +1087,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </table>
     <column id="312" parent="299" name="author_id">
-      <AutoIncrement>4</AutoIncrement>
+      <AutoIncrement>8</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1145,7 +1146,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="324" parent="300" name="category_id">
-      <AutoIncrement>4</AutoIncrement>
+      <AutoIncrement>14</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1171,7 +1172,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="329" parent="301" name="id">
-      <AutoIncrement>1</AutoIncrement>
+      <AutoIncrement>2</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1180,473 +1181,490 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <DasType>int|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="331" parent="301" name="comment_id">
+    <column id="331" parent="301" name="author_id">
       <DasType>int|0s</DasType>
       <Position>3</Position>
     </column>
-    <foreign-key id="332" parent="301" name="comment_likes_ibfk_1">
+    <column id="332" parent="301" name="comment_id">
+      <DasType>int|0s</DasType>
+      <Position>4</Position>
+    </column>
+    <foreign-key id="333" parent="301" name="comment_likes_ibfk_1">
       <ColNames>user_id</ColNames>
       <RefColNames>user_id</RefColNames>
       <RefTableName>users</RefTableName>
     </foreign-key>
-    <foreign-key id="333" parent="301" name="comment_likes_ibfk_2">
+    <foreign-key id="334" parent="301" name="comment_likes_ibfk_2">
+      <ColNames>author_id</ColNames>
+      <RefColNames>author_id</RefColNames>
+      <RefTableName>authors</RefTableName>
+    </foreign-key>
+    <foreign-key id="335" parent="301" name="comment_likes_ibfk_3">
       <ColNames>comment_id</ColNames>
       <RefColNames>comment_id</RefColNames>
       <RefTableName>comments</RefTableName>
     </foreign-key>
-    <index id="334" parent="301" name="PRIMARY">
+    <index id="336" parent="301" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="335" parent="301" name="user_id">
+    <index id="337" parent="301" name="user_id">
       <ColNames>user_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="336" parent="301" name="comment_id">
+    <index id="338" parent="301" name="author_id">
+      <ColNames>author_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="339" parent="301" name="comment_id">
       <ColNames>comment_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="337" parent="301" name="PRIMARY">
+    <key id="340" parent="301" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="338" parent="302" name="comment_id">
-      <AutoIncrement>7</AutoIncrement>
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-    </column>
-    <column id="339" parent="302" name="content">
-      <DasType>varchar(45)|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <column id="340" parent="302" name="user_id">
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-    </column>
-    <column id="341" parent="302" name="news_id">
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>4</Position>
-    </column>
-    <column id="342" parent="302" name="date_posted_on">
-      <DasType>datetime|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>5</Position>
-    </column>
-    <column id="343" parent="302" name="availability">
-      <DasType>tinyint(1)|0s</DasType>
-      <Position>6</Position>
-    </column>
-    <foreign-key id="344" parent="302" name="FK_6">
-      <ColNames>user_id</ColNames>
-      <RefColNames>user_id</RefColNames>
-      <RefTableName>users</RefTableName>
-    </foreign-key>
-    <foreign-key id="345" parent="302" name="FK_5">
-      <ColNames>news_id</ColNames>
-      <RefColNames>news_id</RefColNames>
-      <RefTableName>news</RefTableName>
-    </foreign-key>
-    <index id="346" parent="302" name="PRIMARY">
-      <ColNames>comment_id</ColNames>
-      <Type>btree</Type>
-      <Unique>1</Unique>
-    </index>
-    <index id="347" parent="302" name="FK_3">
-      <ColNames>user_id</ColNames>
-      <Type>btree</Type>
-    </index>
-    <index id="348" parent="302" name="FK_2">
-      <ColNames>news_id</ColNames>
-      <Type>btree</Type>
-    </index>
-    <key id="349" parent="302" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <Primary>1</Primary>
-      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
-    </key>
-    <column id="350" parent="303" name="dmultimedia_id">
-      <AutoIncrement>13</AutoIncrement>
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-    </column>
-    <column id="351" parent="303" name="durl">
-      <DasType>varchar(45)|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <column id="352" parent="303" name="dtype">
-      <DasType>varchar(45)|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-    </column>
-    <index id="353" parent="303" name="PRIMARY">
-      <ColNames>dmultimedia_id</ColNames>
-      <Type>btree</Type>
-      <Unique>1</Unique>
-    </index>
-    <key id="354" parent="303" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <Primary>1</Primary>
-      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
-    </key>
-    <column id="355" parent="304" name="draft_id">
-      <AutoIncrement>8</AutoIncrement>
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-    </column>
-    <column id="356" parent="304" name="draft_title">
-      <DasType>varchar(45)|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <column id="357" parent="304" name="category_id">
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-    </column>
-    <column id="358" parent="304" name="draft_content">
-      <DasType>blob|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>4</Position>
-    </column>
-    <column id="359" parent="304" name="last_edited_on">
-      <DasType>datetime|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>5</Position>
-    </column>
-    <column id="360" parent="304" name="date_of_submission">
-      <DasType>datetime|0s</DasType>
-      <Position>6</Position>
-    </column>
-    <foreign-key id="361" parent="304" name="FK_9">
-      <ColNames>category_id</ColNames>
-      <RefColNames>category_id</RefColNames>
-      <RefTableName>categories</RefTableName>
-    </foreign-key>
-    <index id="362" parent="304" name="PRIMARY">
-      <ColNames>draft_id</ColNames>
-      <Type>btree</Type>
-      <Unique>1</Unique>
-    </index>
-    <index id="363" parent="304" name="FK_2">
-      <ColNames>category_id</ColNames>
-      <Type>btree</Type>
-    </index>
-    <key id="364" parent="304" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <Primary>1</Primary>
-      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
-    </key>
-    <column id="365" parent="305" name="author_id">
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-    </column>
-    <column id="366" parent="305" name="draft_id">
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <column id="367" parent="305" name="contribution_level">
-      <DasType>varchar(45)|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-    </column>
-    <column id="368" parent="305" name="access_key">
-      <DasType>varchar(45)|0s</DasType>
-      <Position>4</Position>
-    </column>
-    <foreign-key id="369" parent="305" name="FK_12">
-      <ColNames>author_id</ColNames>
-      <RefColNames>author_id</RefColNames>
-      <RefTableName>authors</RefTableName>
-    </foreign-key>
-    <foreign-key id="370" parent="305" name="FK_15">
-      <ColNames>author_id</ColNames>
-      <RefColNames>author_id</RefColNames>
-      <RefTableName>authors</RefTableName>
-    </foreign-key>
-    <foreign-key id="371" parent="305" name="FK_13">
-      <ColNames>draft_id</ColNames>
-      <RefColNames>draft_id</RefColNames>
-      <RefTableName>draft</RefTableName>
-    </foreign-key>
-    <index id="372" parent="305" name="PRIMARY">
-      <ColNames>author_id
-draft_id</ColNames>
-      <Type>btree</Type>
-      <Unique>1</Unique>
-    </index>
-    <index id="373" parent="305" name="FK_1">
-      <ColNames>author_id</ColNames>
-      <Type>btree</Type>
-    </index>
-    <index id="374" parent="305" name="FK_2">
-      <ColNames>draft_id</ColNames>
-      <Type>btree</Type>
-    </index>
-    <key id="375" parent="305" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <Primary>1</Primary>
-      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
-    </key>
-    <column id="376" parent="306" name="draft_id">
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-    </column>
-    <column id="377" parent="306" name="dmultimedia_id">
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <foreign-key id="378" parent="306" name="FK_10">
-      <ColNames>draft_id</ColNames>
-      <RefColNames>draft_id</RefColNames>
-      <RefTableName>draft</RefTableName>
-    </foreign-key>
-    <foreign-key id="379" parent="306" name="FK_11">
-      <ColNames>dmultimedia_id</ColNames>
-      <RefColNames>dmultimedia_id</RefColNames>
-      <RefTableName>dmultimedia</RefTableName>
-    </foreign-key>
-    <index id="380" parent="306" name="FK_1">
-      <ColNames>draft_id</ColNames>
-      <Type>btree</Type>
-    </index>
-    <index id="381" parent="306" name="FK_2">
-      <ColNames>dmultimedia_id</ColNames>
-      <Type>btree</Type>
-    </index>
-    <column id="382" parent="307" name="multimedia_id">
-      <AutoIncrement>4</AutoIncrement>
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-    </column>
-    <column id="383" parent="307" name="url">
-      <DasType>varchar(45)|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <column id="384" parent="307" name="type">
-      <DasType>varchar(45)|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-    </column>
-    <column id="385" parent="307" name="visibility">
-      <DasType>tinyint(1)|0s</DasType>
-      <Position>4</Position>
-    </column>
-    <index id="386" parent="307" name="PRIMARY">
-      <ColNames>multimedia_id</ColNames>
-      <Type>btree</Type>
-      <Unique>1</Unique>
-    </index>
-    <key id="387" parent="307" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <Primary>1</Primary>
-      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
-    </key>
-    <column id="388" parent="308" name="news_id">
-      <AutoIncrement>13</AutoIncrement>
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-    </column>
-    <column id="389" parent="308" name="draft_id">
-      <DasType>int|0s</DasType>
-      <Position>2</Position>
-    </column>
-    <column id="390" parent="308" name="news_title">
-      <DasType>varchar(45)|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-    </column>
-    <column id="391" parent="308" name="category_id">
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>4</Position>
-    </column>
-    <column id="392" parent="308" name="news_content">
-      <DasType>blob|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>5</Position>
-    </column>
-    <column id="393" parent="308" name="news_posted_on">
-      <DasType>datetime|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>6</Position>
-    </column>
-    <column id="394" parent="308" name="news_availability">
-      <DasType>tinyint(1)|0s</DasType>
-      <Position>7</Position>
-    </column>
-    <column id="395" parent="308" name="is_draft">
-      <DasType>tinyint(1)|0s</DasType>
-      <Position>8</Position>
-    </column>
-    <foreign-key id="396" parent="308" name="FK_14">
-      <ColNames>draft_id</ColNames>
-      <OnDelete>set-null</OnDelete>
-      <RefColNames>draft_id</RefColNames>
-      <RefTableName>draft</RefTableName>
-    </foreign-key>
-    <foreign-key id="397" parent="308" name="FK_1">
-      <ColNames>category_id</ColNames>
-      <RefColNames>category_id</RefColNames>
-      <RefTableName>categories</RefTableName>
-    </foreign-key>
-    <index id="398" parent="308" name="PRIMARY">
-      <ColNames>news_id</ColNames>
-      <Type>btree</Type>
-      <Unique>1</Unique>
-    </index>
-    <index id="399" parent="308" name="FK_3">
-      <ColNames>draft_id</ColNames>
-      <Type>btree</Type>
-    </index>
-    <index id="400" parent="308" name="FK_2">
-      <ColNames>category_id</ColNames>
-      <Type>btree</Type>
-    </index>
-    <key id="401" parent="308" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <Primary>1</Primary>
-      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
-    </key>
-    <column id="402" parent="309" name="news_id">
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-    </column>
-    <column id="403" parent="309" name="multimedia_id">
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-    </column>
-    <foreign-key id="404" parent="309" name="FK_7">
-      <ColNames>news_id</ColNames>
-      <RefColNames>news_id</RefColNames>
-      <RefTableName>news</RefTableName>
-    </foreign-key>
-    <foreign-key id="405" parent="309" name="FK_8">
-      <ColNames>multimedia_id</ColNames>
-      <RefColNames>multimedia_id</RefColNames>
-      <RefTableName>multimedia</RefTableName>
-    </foreign-key>
-    <index id="406" parent="309" name="FK_1">
-      <ColNames>news_id</ColNames>
-      <Type>btree</Type>
-    </index>
-    <index id="407" parent="309" name="FK_2">
-      <ColNames>multimedia_id</ColNames>
-      <Type>btree</Type>
-    </index>
-    <column id="408" parent="310" name="preference_id">
-      <AutoIncrement>3</AutoIncrement>
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>1</Position>
-    </column>
-    <column id="409" parent="310" name="category_id">
-      <DasType>int|0s</DasType>
-      <Position>2</Position>
-    </column>
-    <column id="410" parent="310" name="user_id">
-      <DasType>int|0s</DasType>
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-    </column>
-    <column id="411" parent="310" name="news_id">
-      <DasType>int|0s</DasType>
-      <Position>4</Position>
-    </column>
-    <foreign-key id="412" parent="310" name="FK_2">
-      <ColNames>category_id</ColNames>
-      <RefColNames>category_id</RefColNames>
-      <RefTableName>categories</RefTableName>
-    </foreign-key>
-    <foreign-key id="413" parent="310" name="FK_4">
-      <ColNames>user_id</ColNames>
-      <RefColNames>user_id</RefColNames>
-      <RefTableName>users</RefTableName>
-    </foreign-key>
-    <foreign-key id="414" parent="310" name="FK_3">
-      <ColNames>news_id</ColNames>
-      <RefColNames>news_id</RefColNames>
-      <RefTableName>news</RefTableName>
-    </foreign-key>
-    <index id="415" parent="310" name="PRIMARY">
-      <ColNames>preference_id</ColNames>
-      <Type>btree</Type>
-      <Unique>1</Unique>
-    </index>
-    <index id="416" parent="310" name="FK_2">
-      <ColNames>category_id</ColNames>
-      <Type>btree</Type>
-    </index>
-    <index id="417" parent="310" name="FK_4">
-      <ColNames>user_id</ColNames>
-      <Type>btree</Type>
-    </index>
-    <index id="418" parent="310" name="FK_3">
-      <ColNames>news_id</ColNames>
-      <Type>btree</Type>
-    </index>
-    <key id="419" parent="310" name="PRIMARY">
-      <NameSurrogate>1</NameSurrogate>
-      <Primary>1</Primary>
-      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
-    </key>
-    <column id="420" parent="311" name="user_id">
+    <column id="341" parent="302" name="comment_id">
       <AutoIncrement>9</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="421" parent="311" name="surname">
+    <column id="342" parent="302" name="content">
       <DasType>varchar(45)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="422" parent="311" name="name">
+    <column id="343" parent="302" name="user_id">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+    </column>
+    <column id="344" parent="302" name="news_id">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+    </column>
+    <column id="345" parent="302" name="date_posted_on">
+      <DasType>datetime|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+    </column>
+    <column id="346" parent="302" name="availability">
+      <DasType>tinyint(1)|0s</DasType>
+      <Position>6</Position>
+    </column>
+    <column id="347" parent="302" name="parent_comment_id">
+      <DasType>int|0s</DasType>
+      <Position>7</Position>
+    </column>
+    <foreign-key id="348" parent="302" name="FK_6">
+      <ColNames>user_id</ColNames>
+      <RefColNames>user_id</RefColNames>
+      <RefTableName>users</RefTableName>
+    </foreign-key>
+    <foreign-key id="349" parent="302" name="FK_5">
+      <ColNames>news_id</ColNames>
+      <RefColNames>news_id</RefColNames>
+      <RefTableName>news</RefTableName>
+    </foreign-key>
+    <index id="350" parent="302" name="PRIMARY">
+      <ColNames>comment_id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="351" parent="302" name="FK_3">
+      <ColNames>user_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="352" parent="302" name="FK_2">
+      <ColNames>news_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="353" parent="302" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="354" parent="303" name="dmultimedia_id">
+      <AutoIncrement>1</AutoIncrement>
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="355" parent="303" name="durl">
+      <DasType>varchar(45)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <column id="356" parent="303" name="dtype">
       <DasType>varchar(45)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="423" parent="311" name="email">
+    <index id="357" parent="303" name="PRIMARY">
+      <ColNames>dmultimedia_id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="358" parent="303" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="359" parent="304" name="draft_id">
+      <AutoIncrement>1</AutoIncrement>
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="360" parent="304" name="draft_title">
+      <DasType>varchar(45)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <column id="361" parent="304" name="category_id">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+    </column>
+    <column id="362" parent="304" name="draft_content">
+      <DasType>blob|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+    </column>
+    <column id="363" parent="304" name="last_edited_on">
+      <DasType>datetime|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+    </column>
+    <column id="364" parent="304" name="date_of_submission">
+      <DasType>datetime|0s</DasType>
+      <Position>6</Position>
+    </column>
+    <foreign-key id="365" parent="304" name="FK_9">
+      <ColNames>category_id</ColNames>
+      <RefColNames>category_id</RefColNames>
+      <RefTableName>categories</RefTableName>
+    </foreign-key>
+    <index id="366" parent="304" name="PRIMARY">
+      <ColNames>draft_id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="367" parent="304" name="FK_2">
+      <ColNames>category_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="368" parent="304" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="369" parent="305" name="author_id">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="370" parent="305" name="draft_id">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <column id="371" parent="305" name="contribution_level">
+      <DasType>varchar(45)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+    </column>
+    <column id="372" parent="305" name="access_key">
+      <DasType>varchar(45)|0s</DasType>
+      <Position>4</Position>
+    </column>
+    <foreign-key id="373" parent="305" name="FK_12">
+      <ColNames>author_id</ColNames>
+      <RefColNames>author_id</RefColNames>
+      <RefTableName>authors</RefTableName>
+    </foreign-key>
+    <foreign-key id="374" parent="305" name="FK_15">
+      <ColNames>author_id</ColNames>
+      <RefColNames>author_id</RefColNames>
+      <RefTableName>authors</RefTableName>
+    </foreign-key>
+    <foreign-key id="375" parent="305" name="FK_13">
+      <ColNames>draft_id</ColNames>
+      <RefColNames>draft_id</RefColNames>
+      <RefTableName>draft</RefTableName>
+    </foreign-key>
+    <index id="376" parent="305" name="PRIMARY">
+      <ColNames>author_id
+draft_id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="377" parent="305" name="FK_1">
+      <ColNames>author_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="378" parent="305" name="FK_2">
+      <ColNames>draft_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="379" parent="305" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="380" parent="306" name="draft_id">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="381" parent="306" name="dmultimedia_id">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <foreign-key id="382" parent="306" name="FK_10">
+      <ColNames>draft_id</ColNames>
+      <RefColNames>draft_id</RefColNames>
+      <RefTableName>draft</RefTableName>
+    </foreign-key>
+    <foreign-key id="383" parent="306" name="FK_11">
+      <ColNames>dmultimedia_id</ColNames>
+      <RefColNames>dmultimedia_id</RefColNames>
+      <RefTableName>dmultimedia</RefTableName>
+    </foreign-key>
+    <index id="384" parent="306" name="FK_1">
+      <ColNames>draft_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="385" parent="306" name="FK_2">
+      <ColNames>dmultimedia_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <column id="386" parent="307" name="multimedia_id">
+      <AutoIncrement>12</AutoIncrement>
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="387" parent="307" name="url">
+      <DasType>blob|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <column id="388" parent="307" name="type">
+      <DasType>varchar(45)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+    </column>
+    <column id="389" parent="307" name="visibility">
+      <DasType>tinyint(1)|0s</DasType>
+      <Position>4</Position>
+    </column>
+    <index id="390" parent="307" name="PRIMARY">
+      <ColNames>multimedia_id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="391" parent="307" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="392" parent="308" name="news_id">
+      <AutoIncrement>6</AutoIncrement>
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="393" parent="308" name="draft_id">
+      <DasType>int|0s</DasType>
+      <Position>2</Position>
+    </column>
+    <column id="394" parent="308" name="news_title">
+      <DasType>varchar(45)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+    </column>
+    <column id="395" parent="308" name="category_id">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+    </column>
+    <column id="396" parent="308" name="news_content">
+      <DasType>blob|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+    </column>
+    <column id="397" parent="308" name="news_posted_on">
+      <DasType>datetime|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>6</Position>
+    </column>
+    <column id="398" parent="308" name="news_availability">
+      <DasType>tinyint(1)|0s</DasType>
+      <Position>7</Position>
+    </column>
+    <column id="399" parent="308" name="is_draft">
+      <DasType>tinyint(1)|0s</DasType>
+      <Position>8</Position>
+    </column>
+    <foreign-key id="400" parent="308" name="FK_14">
+      <ColNames>draft_id</ColNames>
+      <OnDelete>set-null</OnDelete>
+      <RefColNames>draft_id</RefColNames>
+      <RefTableName>draft</RefTableName>
+    </foreign-key>
+    <foreign-key id="401" parent="308" name="FK_1">
+      <ColNames>category_id</ColNames>
+      <RefColNames>category_id</RefColNames>
+      <RefTableName>categories</RefTableName>
+    </foreign-key>
+    <index id="402" parent="308" name="PRIMARY">
+      <ColNames>news_id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="403" parent="308" name="FK_3">
+      <ColNames>draft_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="404" parent="308" name="FK_2">
+      <ColNames>category_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="405" parent="308" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="406" parent="309" name="news_id">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="407" parent="309" name="multimedia_id">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <foreign-key id="408" parent="309" name="FK_7">
+      <ColNames>news_id</ColNames>
+      <RefColNames>news_id</RefColNames>
+      <RefTableName>news</RefTableName>
+    </foreign-key>
+    <foreign-key id="409" parent="309" name="FK_8">
+      <ColNames>multimedia_id</ColNames>
+      <RefColNames>multimedia_id</RefColNames>
+      <RefTableName>multimedia</RefTableName>
+    </foreign-key>
+    <index id="410" parent="309" name="FK_1">
+      <ColNames>news_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="411" parent="309" name="FK_2">
+      <ColNames>multimedia_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <column id="412" parent="310" name="preference_id">
+      <AutoIncrement>9</AutoIncrement>
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="413" parent="310" name="category_id">
+      <DasType>int|0s</DasType>
+      <Position>2</Position>
+    </column>
+    <column id="414" parent="310" name="user_id">
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+    </column>
+    <column id="415" parent="310" name="news_id">
+      <DasType>int|0s</DasType>
+      <Position>4</Position>
+    </column>
+    <foreign-key id="416" parent="310" name="FK_2">
+      <ColNames>category_id</ColNames>
+      <RefColNames>category_id</RefColNames>
+      <RefTableName>categories</RefTableName>
+    </foreign-key>
+    <foreign-key id="417" parent="310" name="FK_4">
+      <ColNames>user_id</ColNames>
+      <RefColNames>user_id</RefColNames>
+      <RefTableName>users</RefTableName>
+    </foreign-key>
+    <foreign-key id="418" parent="310" name="FK_3">
+      <ColNames>news_id</ColNames>
+      <RefColNames>news_id</RefColNames>
+      <RefTableName>news</RefTableName>
+    </foreign-key>
+    <index id="419" parent="310" name="PRIMARY">
+      <ColNames>preference_id</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="420" parent="310" name="FK_2">
+      <ColNames>category_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="421" parent="310" name="FK_4">
+      <ColNames>user_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="422" parent="310" name="FK_3">
+      <ColNames>news_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="423" parent="310" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <column id="424" parent="311" name="user_id">
+      <AutoIncrement>10</AutoIncrement>
+      <DasType>int|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+    </column>
+    <column id="425" parent="311" name="surname">
+      <DasType>varchar(45)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+    </column>
+    <column id="426" parent="311" name="name">
+      <DasType>varchar(45)|0s</DasType>
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+    </column>
+    <column id="427" parent="311" name="email">
       <DasType>varchar(45)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
     </column>
-    <column id="424" parent="311" name="password">
+    <column id="428" parent="311" name="password">
       <DasType>varchar(45)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>5</Position>
     </column>
-    <column id="425" parent="311" name="active">
+    <column id="429" parent="311" name="active">
       <DasType>tinyint(1)|0s</DasType>
       <Position>6</Position>
     </column>
-    <column id="426" parent="311" name="subscribed">
+    <column id="430" parent="311" name="subscribed">
       <DasType>tinyint(1)|0s</DasType>
       <Position>7</Position>
     </column>
-    <index id="427" parent="311" name="PRIMARY">
+    <index id="431" parent="311" name="PRIMARY">
       <ColNames>user_id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="428" parent="311" name="PRIMARY">
+    <key id="432" parent="311" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>

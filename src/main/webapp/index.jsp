@@ -62,48 +62,18 @@
 <%@ page import = "org.json.simple.parser.*" %>
 <%@page import="java.io.FileReader"%>
 <%@page import="jakarta.servlet.http.HttpSession"%>
+<%@ page import="com.project.entities.DatabaseConnector" %>
 
 
-<%
-
-  JSONParser jsonParser = new JSONParser();
-  JSONObject jsonObject = null;
-  try {
-    jsonObject = (JSONObject) jsonParser.parse(new FileReader("C:/Users/gogul/IdeaProjects/project/src/main/webapp/newjson.json"));
-  } catch (ParseException e) {
-    throw new RuntimeException(e);
-  }
-
-  String User = (String) jsonObject.get("username");
-  String Pass = (String) jsonObject.get("password");
-  String Driver = (String) jsonObject.get("driverName");
-  String Drive = (String) jsonObject.get("driver");
-  try {
-    Class.forName(Driver);
-  } catch (ClassNotFoundException e) {
-    throw new RuntimeException(e);
-  }
-  Connection conn = null;
-  try {
-    conn = DriverManager.getConnection(Drive, User, Pass);
-  } catch (SQLException e) {
-    throw new RuntimeException(e);
-  }
-
-
-%>
-
-<%
+  <%
+  Connection conn = DatabaseConnector.getConnection();
   String msg = "";
 
-
   if ("POST".equals(request.getMethod())) {
-
     String surname = request.getParameter("surname");
     String name = request.getParameter("name");
     String email = request.getParameter("email");
     String password = request.getParameter("password");
-
     PreparedStatement userList = null;
     try {
       userList = conn.prepareStatement("SELECT email, password FROM users");
@@ -117,6 +87,9 @@
       throw new RuntimeException(e);
     }
 
+    boolean emailExists = false;
+    boolean passwordExists = false;
+
     while (true) {
       try {
         if (!userListResult.next()) break;
@@ -125,24 +98,20 @@
       }
       try {
         if (userListResult.getString("email").equals(email)) {
-          msg = "Email already exists!";
-          break;
-        }
-      } catch (SQLException e) {
-        throw new RuntimeException(e);
-      }
-
-      try {
-        if (userListResult.getString("password").equals(password)) {
-          msg = "Password already used!";
-          break;
+          emailExists = true;
+          if (userListResult.getString("password").equals(password)) {
+            passwordExists = true;
+            break;
+          }
         }
       } catch (SQLException e) {
         throw new RuntimeException(e);
       }
     }
 
-    if (!msg.equals("Email already exists!") && !msg.equals("Password already used!")) {
+    if (emailExists && passwordExists) {
+      msg = "An account is already linked with this email address!";
+    } else {
       String insert = "INSERT INTO users (surname, name, email, password, active, subscribed) VALUES (?,?,?,?,1,1)";
       PreparedStatement stmt = null;
       try {
@@ -168,12 +137,19 @@
       out.print("<div id='loader' style='display:none;'><h3>Authentication successful. Redirecting you to the news page...</h3></div>");
       String redirectTo = (String) request.getSession().getAttribute("lastPageBeforeLogin");
 
-      out.print("<script>document.getElementById('loader').style.display = 'block'; setTimeout(function() { window.location.href = '" + redirectTo + "'; }, 2000);</script>");
+      if (redirectTo == null || redirectTo.isEmpty()) {
+        redirectTo = "News.jsp";
+      }
 
+      out.print("<script>document.getElementById('loader-container').style.display = 'block'; setTimeout(function() { window.location.href = '" + redirectTo + "'; }, 2000);</script>");
     }
   }
 %>
+
+
+
 <body>
+
 
 <section class="vh-100 bg-image" style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');">
   <div class="mask d-flex align-items-center h-100 gradient-custom-3">
@@ -184,7 +160,7 @@
             <div class="card-body p-5">
               <h2 class="text-uppercase text-center mb-5">Create an account: </h2>
 
-              <form action="index.jsp" method="POST">
+              <form action="" method="POST">
 
                 <div class="form-outline mb-4">
                   <input type="text" id="surname" class="form-control form-control-lg" name="surname" required />
@@ -211,8 +187,9 @@
                 <div class="d-flex justify-content-center">
                   <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body" name="submit">Register</button>
                 </div>
-                <div class="loader-container" id="loader-container">
-                  <div class="loader"></div>
+                <div class="loader-container" id="loader-container" style="display: none;">
+
+                <div class="loader"></div>
                   <div class="text-center text-white" style="position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%);">
                     Authentication successful. Redirecting you to the news page...
                   </div>
@@ -222,20 +199,6 @@
                 <p class="text-center text-muted mt-5 mb-0">Already have an account? <a href="login.jsp" class="fw-bold text-body"><u>Login here</u></a></p>
                 <%
 
-                  if(msg.equals("Email already exists!"))
-                  {
-                    out.print(" <div class=\"alert alert-danger mt-2  \" role=\"alert\">"+
-                            "      Email already exists!"+"</div>");
-                  }
-
-
-                  if(msg.equals("Password already used!"))
-                  {
-                    out.print(" <div class=\"alert alert-danger mt-2  \" role=\"alert\">"+
-                            "      Password already used!"+"</div>");
-                  }
-
-
                   if(msg.equals("Authentication successful."))
                   {
                     out.print(" <div class=\"alert alert-success\" role=\"alert\">"+
@@ -243,9 +206,9 @@
 
 
                   }
-
-
-
+                  if(msg.equals("An account is already linked with this email address!")) {
+                    out.print("<div class='alert alert-danger mt-2' role='alert'>" + msg + "</div>");
+                  }
 
                 %>
               </form>
@@ -257,8 +220,3 @@
     </div>
   </div>
 </section>
-
-
-</body>
-
-</html>
