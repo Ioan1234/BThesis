@@ -10,4 +10,6 @@
 .max-w-80{
     max-width: 80%;
 }
-
+.btn-sm {
+    font-size: 14px;
+}

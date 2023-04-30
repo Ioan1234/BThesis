@@ -148,9 +148,14 @@ async function replyComment(button) {
         const replyForm = document.createElement("form");
         replyForm.id = "reply-form-" + commentId;
         replyForm.innerHTML = `
-            <textarea name="content" rows="3" cols="40" placeholder="Write your reply..."></textarea>
-            <input type="hidden" name="parent_comment_id" value="${commentId}">
-            <button type="submit">Submit Reply</button>
+        <table style="width: 100%;">
+        <tr>
+            <td colspan="5"><textarea name="content" rows="3" style="width: 100%;" placeholder="Write your reply..."></textarea></td>
+        </tr>
+        <tr>
+            <td colspan="5" style="text-align: right;"><input type="hidden" name="parent_comment_id" value="${commentId}"><button type="submit" class="btn btn-info btn-sm">Submit Reply</button></td>
+        </tr>
+        </table>
         `;
 
         replyFormWrapper = document.createElement("div");
@@ -205,11 +210,17 @@ async function replyComment(button) {
 
         });
 
+        const replyFormTableRow = document.createElement("tr");
+        const replyFormTableCell = document.createElement("td");
+        replyFormTableCell.colSpan = 5;
+        replyFormTableCell.appendChild(replyFormWrapper);
+        replyFormTableRow.appendChild(replyFormTableCell);
+
         if (button.parentElement) {
-            button.parentElement.insertAdjacentElement("afterend", replyFormWrapper);
+            button.parentElement.parentElement.insertAdjacentElement("afterend", replyFormTableRow);
         }
     } else {
-        replyFormWrapper.remove();
+        replyFormWrapper.parentElement.parentElement.remove();
         button.removeAttribute("data-comment-id");
     }
 }
