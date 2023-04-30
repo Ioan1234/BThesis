@@ -6,18 +6,24 @@ function likeComment(commentId) {
             var responseJson = JSON.parse(xhr.responseText);
             var likeButton = document.querySelector("button[onclick='likeComment(" + commentId + ")']");
             // Update the like button text and title attributes based on the response
+            var likesCount = parseInt(responseJson.likes_count, 10);
+
+            if (isNaN(likesCount)) {
+                likesCount = 0;
+            }
+
             if (responseJson.action === "liked") {
-                likeButton.innerText = "Liked by " + (responseJson.likes_count - 1);
+                likeButton.innerText = "Liked by " + responseJson.likers.split(", ")[0] + (likesCount > 1 ? " + " + (likesCount - 1) : "");
                 likeButton.title = responseJson.likers;
             } else {
-                if (responseJson.likes_count === 0) {
+                if (likesCount === 0) {
                     likeButton.innerText = "Like";
                     likeButton.title = "";
-                } else if (responseJson.likes_count === 1) {
+                } else if (likesCount === 1) {
                     likeButton.innerText = "Liked by " + responseJson.likers;
                     likeButton.title = responseJson.likers;
                 } else {
-                    likeButton.innerText = "Liked by " + responseJson.likers.split(", ")[0] + " + " + (responseJson.likes_count - 1);
+                    likeButton.innerText = "Liked by " + responseJson.likers.split(", ")[0] + " + " + (likesCount - 1);
                     likeButton.title = responseJson.likers;
                 }
             }
@@ -27,6 +33,9 @@ function likeComment(commentId) {
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.send("comment_id=" + commentId);
 }
+
+
+
 
 function deleteComment(commentId) {
     fetch('deleteComment.jsp', {
@@ -77,26 +86,47 @@ async function fetchParentCommentText(parentCommentId) {
     }
 }
 
+function showError(errorMessage, replyForm, textarea, submitButton, uploadingMessage) {
+    console.error(errorMessage);
+
+    // Remove the uploading message
+    replyForm.removeChild(uploadingMessage);
+
+    // Display the textarea and submit button in case of failure
+    textarea.style.display = 'block';
+    submitButton.style.display = 'inline';
+
+    // Display the error message
+    const errorElement = document.createElement('span');
+    errorElement.style.color = 'red';
+    errorElement.innerText = errorMessage;
+    replyForm.appendChild(errorElement);
+
+    // Remove the error message after 5 seconds
+    setTimeout(() => {
+        replyForm.removeChild(errorElement);
+    }, 5000);
+}
 
 
 
 
-function createReplyElement(commentId, text, parentCommentText, postedOn, likers, userName, userId, parentCommentId) {
+function createReplyElement(commentId, text, parentCommentText, postedOn, likers, userName, userId, parentCommentId,isUploading = false) {
     const replyElement = document.createElement("tr");
     replyElement.setAttribute("data-user-name", userName);
     replyElement.setAttribute("data-parent-comment-id", parentCommentId);
     replyElement.setAttribute("data-parent-comment-text", parentCommentText); // Add this line
     replyElement.id = "comment-row-" + commentId;
 
+    const replyHeaderText = isUploading ? 'Uploading your comment shortly...' : `${userName} replied to: <i>${parentCommentText}</i>`;
     const replyText = `
-    <td width="25%" class="text-secondary" data-reply-header="${parentCommentId}"><span class="text-secondary">${userName} replied to: <i>${parentCommentText}</i></span></td>
+    <td width="25%" class="text-secondary" data-reply-header="${parentCommentId}"><span class="text-secondary">${replyHeaderText}</span></td>
 
     <td width="55%"><i>${text}</i></td>
     <td width="10%">${postedOn}</td>
     <td width="5%"><button type="button" class="btn btn-primary btn-sm" onclick="likeComment(${commentId})" title="${likers}">Like</button></td>
-    <td width="5%"><button type="button" class="btn btn-info btn-sm" data-comment-id="${commentId}" data-parent-comment-id="${parentCommentId}" onclick="replyComment(this)">Reply</button></td>
+    <td width="5%"><button type="button" class="btn btn-info btn-sm" data-comment-id="${commentId}" data-parent-comment-id="${parentCommentId}" data-parent-comment-text="${parentCommentText}" onclick="replyComment(this)">Reply</button></td>
 `;
-
     replyElement.innerHTML = replyText;
 
     console.log(replyElement);
@@ -112,6 +142,9 @@ async function replyComment(button) {
     let replyFormWrapper = document.getElementById("reply-form-wrapper-" + commentId);
 
     if (!replyFormWrapper) {
+        const parentCommentId = button.getAttribute("data-parent-comment-id");
+        const parentCommentText = button.getAttribute("data-parent-comment-text");
+
         const replyForm = document.createElement("form");
         replyForm.id = "reply-form-" + commentId;
         replyForm.innerHTML = `
@@ -133,8 +166,19 @@ async function replyComment(button) {
             textarea.style.display = 'none';
             submitButton.style.display = 'none';
 
+            const uploadingMessage = document.createElement('span');
+            uploadingMessage.innerText = "Uploading your comment shortly...";
+            replyForm.appendChild(uploadingMessage);
+
+
             const content = replyForm.elements['content'].value;
             const parentCommentId = replyForm.elements['parent_comment_id'].value;
+            const temporaryReplyElement = createReplyElement('temporary', content, '', '', '', '', '', parentCommentId, true);
+            const parentCommentRow = document.getElementById("comment-row-" + parentCommentId);
+
+            if (parentCommentRow) {
+                parentCommentRow.insertAdjacentElement("afterend", temporaryReplyElement);
+            }
 
             const response = await fetch("submitReply.jsp", {
                 method: "POST",
@@ -150,33 +194,15 @@ async function replyComment(button) {
                 console.log("userName:", replyResult.userName);
                 console.log("userId:", replyResult.userId);
 
-
                 if (replyResult.status.trim() === "success") {
-                    const userName = replyResult.userName;
-                    const userId = replyResult.userId;
-                    const parentCommentText = await fetchParentCommentText(parentCommentId);
-                    const replyElement = createReplyElement(replyResult.commentId, content, parentCommentText, replyResult.postedOn, "", userName, userId);
-                    const parentCommentRow = document.getElementById("comment-row-" + parentCommentId);
-
-                    if (parentCommentRow) {
-                        parentCommentRow.insertAdjacentElement("afterend", replyElement);
-                    }
-
-                    replyFormWrapper.remove();
+                    location.reload();
                 } else {
-                    // Display the textarea and submit button in case of failure
-                    textarea.style.display = 'block';
-                    submitButton.style.display = 'inline';
-
-                    console.error("Failed to submit reply:", replyResult.error);
+                    showError(replyResult.error, replyForm, textarea, submitButton, uploadingMessage);
                 }
             } else {
-                // Display the textarea and submit button in case of failure
-                textarea.style.display = 'block';
-                submitButton.style.display = 'inline';
-
-                console.error("Failed to submit reply. Status:", response.status);
+                showError(`Failed to submit reply. Status: ${response.status}`, replyForm, textarea, submitButton, uploadingMessage);
             }
+
         });
 
         if (button.parentElement) {

@@ -4,41 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="553ade07-8783-4310-a30f-0cbdfb1a98b8" name="Changes" comment="reply button bug">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/2e6fa5ee-6234-4bb3-afdc-19f5e28ccf0c.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/2e6fa5ee-6234-4bb3-afdc-19f5e28ccf0c/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/2e6fa5ee-6234-4bb3-afdc-19f5e28ccf0c/storage_v2/_src_/schema/mysql.osA4Bg.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/2e6fa5ee-6234-4bb3-afdc-19f5e28ccf0c/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/2e6fa5ee-6234-4bb3-afdc-19f5e28ccf0c/storage_v2/_src_/schema/sys.zb4BAA.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/displayComments.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/javascript/scrips.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/submitReply.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/3961b900-431e-4179-ac89-41ffa8efcd49.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/3961b900-431e-4179-ac89-41ffa8efcd49/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/3961b900-431e-4179-ac89-41ffa8efcd49/storage_v2/_src_/schema/mysql.osA4Bg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/3961b900-431e-4179-ac89-41ffa8efcd49/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/3961b900-431e-4179-ac89-41ffa8efcd49/storage_v2/_src_/schema/sys.zb4BAA.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/547a5966-1cef-481e-8e9b-98e52dc3c448.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/547a5966-1cef-481e-8e9b-98e52dc3c448/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/547a5966-1cef-481e-8e9b-98e52dc3c448/storage_v2/_src_/schema/mysql.osA4Bg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/547a5966-1cef-481e-8e9b-98e52dc3c448/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/547a5966-1cef-481e-8e9b-98e52dc3c448/storage_v2/_src_/schema/sys.zb4BAA.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/70d98136-2d32-4496-a185-4af0d5acd51c.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/70d98136-2d32-4496-a185-4af0d5acd51c/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/70d98136-2d32-4496-a185-4af0d5acd51c/storage_v2/_src_/schema/mysql.osA4Bg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/70d98136-2d32-4496-a185-4af0d5acd51c/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/70d98136-2d32-4496-a185-4af0d5acd51c/storage_v2/_src_/schema/sys.zb4BAA.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
+    <list default="true" id="553ade07-8783-4310-a30f-0cbdfb1a98b8" name="Changes" comment="userName and parentCommentText undefined">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/News.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/News.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/css/utils.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/css/utils.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/likeComment.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/likeComment.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/seeNews.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/seeNews.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/displayComments.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/displayComments.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/javascript/scrips.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/javascript/scrips.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -306,6 +275,8 @@
       <workItem from="1682783458857" duration="8743000" />
       <workItem from="1682795022047" duration="1861000" />
       <workItem from="1682797568211" duration="440000" />
+      <workItem from="1682798091665" duration="193000" />
+      <workItem from="1682862959472" duration="5447000" />
     </task>
     <task id="LOCAL-00001" summary="1st commit- error in seeNews">
       <created>1680435768422</created>
@@ -335,7 +306,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680782778111</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="userName and parentCommentText undefined">
+      <created>1682798253433</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1682798253433</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -370,6 +348,7 @@
     <MESSAGE value="2nd commit- cannot login from the main news page" />
     <MESSAGE value="3-rd commit" />
     <MESSAGE value="reply button bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="reply button bug" />
+    <MESSAGE value="userName and parentCommentText undefined" />
+    <option name="LAST_COMMIT_MESSAGE" value="userName and parentCommentText undefined" />
   </component>
 </project>

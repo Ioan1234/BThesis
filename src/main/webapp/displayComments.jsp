@@ -252,6 +252,7 @@
                     buttonText = "Liked by " + likers;
                 } else {
                     buttonText = "Like";
+                    likers = ""; // Set likers to an empty string if there are no likers
                 }
                 out.println(""
                         + "<td width=\"25%\" class=\"text-secondary\">" + userRESULT.getString("surname") + " " + userRESULT.getString("name") + " said </td>"
@@ -301,6 +302,7 @@
                             childButtonText = "Liked by " + childLikers;
                         } else {
                             childButtonText = "Like";
+                            childLikers = ""; // Set childLikers to an empty string if there are no likers
                         }
                         out.println("<tr id=\"comment-row-" + childCommentId + "\" data-parent-comment-id=\"" + parentCommentResult.getInt("comment_id") + "\" data-parent-comment-text=\"" + commentContent +"\" data-user-name=\"" + childUserRESULT.getString("surname") + " " + childUserRESULT.getString("name") + "\">"
                         + "<td width=\"25%\" class=\"text-secondary\" data-reply-header=\"" + parentCommentResult.getInt("comment_id") + "\">" + childUserRESULT.getString("surname") + " " + childUserRESULT.getString("name") + " replied to: <i>" + commentContent + "</i></td>"
