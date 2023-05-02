@@ -125,7 +125,7 @@ function createReplyElement(commentId, text, parentCommentText, postedOn, likers
     <td width="55%"><i>${text}</i></td>
     <td width="10%">${postedOn}</td>
     <td width="5%"><button type="button" class="btn btn-primary btn-sm" onclick="likeComment(${commentId})" title="${likers}">Like</button></td>
-    <td width="5%"><button type="button" class="btn btn-info btn-sm" data-comment-id="${commentId}" data-parent-comment-id="${parentCommentId}" data-parent-comment-text="${parentCommentText}" onclick="replyComment(this)">Reply</button></td>
+    <td width="5%"><button type="button" class="btn btn-info btn-sm" data-comment-id="${commentId}" data-parent-comment-id="${parentCommentId}" data-parent-comment-text="${parentCommentText}" onclick="replyComment(this)" id="reply-button-${commentId}">Reply</button></td>
 `;
     replyElement.innerHTML = replyText;
 
@@ -133,7 +133,88 @@ function createReplyElement(commentId, text, parentCommentText, postedOn, likers
 
     return replyElement;
 }
+function editComment(commentId) {
+    const commentRow = document.getElementById("comment-row-" + commentId);
+    const commentContentElement = commentRow.querySelector("td[data-parent-comment-text] i");
 
+    // Change the comment's content to a textarea for editing
+    const textarea = document.createElement("textarea");
+    textarea.style.width = "100%";
+    textarea.style.height = "100px"; // Increase the height of the textarea
+    textarea.style.padding = "5px"; // Add padding for better appearance
+    textarea.value = commentContentElement.innerText;
+    commentContentElement.replaceWith(textarea);
+
+    // Add "Save Changes" and "Discard Changes" buttons
+    const editButton = commentRow.querySelector("button[data-edit-button]");
+    editButton.style.display = "none";
+    const removeButton = commentRow.querySelector("button[data-remove-button]");
+    removeButton.style.display = "none";
+
+    // Hide the like button
+    const likeButton = document.getElementById('like-' + commentId);
+    likeButton.style.display = 'none';
+
+    const saveChangesButton = document.createElement("button");
+    saveChangesButton.type = "button";
+    saveChangesButton.className = "btn btn-success btn-sm";
+    saveChangesButton.innerText = "Save Changes";
+    removeButton.insertAdjacentElement("beforebegin", saveChangesButton);
+
+    const discardChangesButton = document.createElement("button");
+    discardChangesButton.type = "button";
+    discardChangesButton.className = "btn btn-danger btn-sm";
+    discardChangesButton.innerText = "Discard Changes";
+    saveChangesButton.insertAdjacentElement("afterend", discardChangesButton);
+
+    // Implement "Save Changes" functionality
+    function revertUI() {
+        textarea.replaceWith(commentContentElement);
+        saveChangesButton.remove();
+        discardChangesButton.remove();
+        editButton.style.display = "inline";
+        removeButton.style.display = "inline";
+        likeButton.style.display = 'inline'; // Show the like button after the edit is submitted
+    }
+
+    // Implement "Save Changes" functionality
+    saveChangesButton.addEventListener("click", async () => {
+        try {
+            // Send an update request to the server (replace "updateComment.jsp" with the appropriate endpoint)
+            const response = await fetch("updateComment.jsp", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `comment_id=${encodeURIComponent(commentId)}&content=${encodeURIComponent(textarea.value)}`
+            });
+
+            if (response.ok) {
+                const updateResult = await response.json();
+
+                if (updateResult.status.trim() === "success") {
+                    // Update the comment's content in the UI
+                    commentContentElement.innerText = textarea.value;
+                    revertUI();
+                } else {
+                    alert(updateResult.error);
+                    revertUI();
+                }
+            } else {
+                alert(`Failed to update comment. Status: ${response.status}`);
+                revertUI();
+            }
+        } catch (error) {
+            alert(`Failed to update comment. Error: ${error.message}`);
+            revertUI();
+        }
+    });
+
+    // Implement "Discard Changes" functionality
+    discardChangesButton.addEventListener("click", () => {
+        revertUI();
+    });
+}
 
 
 
@@ -153,7 +234,7 @@ async function replyComment(button) {
             <td colspan="5"><textarea name="content" rows="3" style="width: 100%;" placeholder="Write your reply..."></textarea></td>
         </tr>
         <tr>
-            <td colspan="5" style="text-align: right;"><input type="hidden" name="parent_comment_id" value="${commentId}"><button type="submit" class="btn btn-info btn-sm">Submit Reply</button></td>
+            <td colspan="5" style="text-align: right;"><input type="hidden" name="parent_comment_id" value="${commentId}"><button type="submit" class="btn btn-info btn-sm">Submit Reply</button><button type="button" class="btn btn-danger btn-sm" onclick="cancelReply('${commentId}')">Cancel</button></td>
         </tr>
         </table>
         `;
@@ -219,11 +300,26 @@ async function replyComment(button) {
         if (button.parentElement) {
             button.parentElement.parentElement.insertAdjacentElement("afterend", replyFormTableRow);
         }
+        button.disabled=true;
     } else {
         replyFormWrapper.parentElement.parentElement.remove();
         button.removeAttribute("data-comment-id");
     }
+
 }
+function cancelReply(commentId) {
+    const replyFormWrapper = document.getElementById("reply-form-wrapper-" + commentId);
+    if (replyFormWrapper) {
+        replyFormWrapper.parentElement.parentElement.remove();
+    }
+
+    const replyButton = document.getElementById("reply-button-" + commentId);
+    if (replyButton) {
+        replyButton.disabled = false;
+    }
+    location.reload();
+}
+
 
 
 
@@ -256,7 +352,6 @@ async function displayRepliesOnLoad() {
 window.addEventListener('DOMContentLoaded', async () => {
     await displayRepliesOnLoad();
 });
-
 
 
 

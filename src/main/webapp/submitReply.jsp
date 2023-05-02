@@ -17,6 +17,7 @@
 
 
 <%
+try{
 Connection conn = DatabaseConnector.getConnection();
 
 
@@ -82,6 +83,10 @@ if (content != null && content.trim().length() > 0 && parentCommentIdParam != nu
 
 }
 out.print(jsonResponse.toString());
-
+}
+catch (Exception e) {
+    e.printStackTrace(); // This will print the stack trace to the server logs
+    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+}
 %>
 

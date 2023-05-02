@@ -215,6 +215,7 @@
         <tbody>
 
         <%
+
             int currentUserId = -1;
             if (session.getAttribute("id") != null) {
                 currentUserId = (int) session.getAttribute("id");
@@ -258,18 +259,20 @@
                         + "<td width=\"25%\" class=\"text-secondary\">" + userRESULT.getString("surname") + " " + userRESULT.getString("name") + " said </td>"
                         + "<td width=\"55%\" data-parent-comment-text><i>" + commentContent + "</i></td>"
                         + "<td width=\"10%\">" + commentPostedOn + "</td>"
-                        + "<td width=\"5%\"><button type=\"button\" class=\"btn btn-primary btn-sm\" onclick=\"likeComment(" + parentCommentResult.getInt("comment_id") + ")\" title=\"" + likers + "\" " + ((accountType == null || accountType.equals("author")) ? "disabled" : "") + ">" + buttonText + "</button></td>"
+                        + "<td width=\"5%\"><button type=\"button\" id=\"like-" + commentId + "\" class=\"btn btn-primary btn-sm\" onclick=\"likeComment(" + commentId + ")\" title=\"" + likers + "\" " + ((accountType == null || accountType.equals("author")) ? "disabled" : "") + ">" + buttonText + "</button></td>"
                 );
 
+
                 if (currentUserId == userId && session.getAttribute("accountType").equals("user")) {
-                    out.println("<td width=\"5%\"><button type=\"button\" id=\"remove-" + parentCommentResult.getInt("comment_id") + "\" class=\"btn btn-warning btn-sm\" onclick=\"deleteComment(" + parentCommentResult.getInt("comment_id") + ")\">Remove</button></td>");
+                    out.println("<td width=\"5%\"><button type=\"button\" id=\"edit-" + commentId + "\" class=\"btn btn-secondary btn-sm\" data-edit-button onclick=\"editComment(" + commentId + ")\">Edit</button></td>");
+                    out.println("<td width=\"5%\"><button type=\"button\" id=\"remove-" + commentId + "\" class=\"btn btn-warning btn-sm\" data-remove-button onclick=\"deleteComment(" + commentId + ")\">Remove</button></td>");
                 } else {
-                    out.println("<td width=\"5%\"><button type=\"button\" class=\"btn btn-info btn-sm\" data-comment-id=\"" + parentCommentResult.getInt("comment_id") + "\" data-parent-comment-id=\"" + parentCommentResult.getInt("comment_id") + "\" onclick=\"replyComment(this)\">Reply</button></td>");
-
-
-
-
+                    if (accountType != null && accountType.equals("user")) {
+                        out.println("<td width=\"5%\"><button type=\"button\" class=\"btn btn-info btn-sm\" data-comment-id=\"" + commentId + "\" data-parent-comment-id=\"" + commentId + "\" onclick=\"replyComment(this)\">Reply</button></td>");
+                    }
+                    out.println("<td></td>"); // Add an empty cell to keep the table structure
                 }
+
                 childCommentResult.beforeFirst(); // Reset the childCommentResult cursor
                 while (childCommentResult.next()) {
                     if (childCommentResult.getInt("parent_comment_id") == parentCommentResult.getInt("comment_id")) {
@@ -305,17 +308,21 @@
                             childLikers = ""; // Set childLikers to an empty string if there are no likers
                         }
                         out.println("<tr id=\"comment-row-" + childCommentId + "\" data-parent-comment-id=\"" + parentCommentResult.getInt("comment_id") + "\" data-parent-comment-text=\"" + commentContent +"\" data-user-name=\"" + childUserRESULT.getString("surname") + " " + childUserRESULT.getString("name") + "\">"
-                        + "<td width=\"25%\" class=\"text-secondary\" data-reply-header=\"" + parentCommentResult.getInt("comment_id") + "\">" + childUserRESULT.getString("surname") + " " + childUserRESULT.getString("name") + " replied to: <i>" + commentContent + "</i></td>"
+                                + "<td width=\"25%\" class=\"text-secondary\" data-reply-header=\"" + parentCommentResult.getInt("comment_id") + "\">" + childUserRESULT.getString("surname") + " " + childUserRESULT.getString("name") + " replied to: <i>" + commentContent + "</i></td>"
                                 + "<td width=\"55%\"><i>" + childCommentContent + "</i></td>"
                                 + "<td width=\"10%\">" + childCommentPostedOn + "</td>"
-                                + "<td width=\"5%\"><button type=\"button\" class=\"btn btn-primary btn-sm\" onclick=\"likeComment(" + childCommentId + ")\" title=\"" + childLikers + "\" " + ((accountType == null || accountType.equals("author")) ? "disabled" : "") + ">" + childButtonText + "</button></td>");
+                                + "<td width=\"5%\"><button type=\"button\" id=\"like-" + childCommentId + "\" class=\"btn btn-primary btn-sm\" onclick=\"likeComment(" + childCommentId + ")\" title=\"" + childLikers + "\" " + ((accountType == null || accountType.equals("author")) ? "disabled" : "") + ">" + childButtonText + "</button></td>");
 
                         if (currentUserId == childUserId && session.getAttribute("accountType").equals("user")) {
-                            out.println("<td width=\"5%\"><button type=\"button\" id=\"remove-" + childCommentId + "\" class=\"btn btn-warning btn-sm\" onclick=\"deleteComment(" + childCommentId + ")\">Remove</button></td>");
+                            out.println("<td width=\"5%\"><button type=\"button\" id=\"edit-" + childCommentId + "\" class=\"btn btn-secondary btn-sm\" data-edit-button onclick=\"editComment(" + childCommentId + ")\">Edit</button></td>");
+                            out.println("<td width=\"5%\"><button type=\"button\" id=\"remove-" + childCommentId + "\" class=\"btn btn-warning btn-sm\" data-remove-button onclick=\"deleteComment(" + childCommentId + ")\">Remove</button></td>");
                         } else {
-                            out.println("<td width=\"5%\"><button type=\"button\" class=\"btn btn-info btn-sm\" data-comment-id=\"" + childCommentId + "\" data-parent-comment-id=\"" + childCommentResult.getInt("parent_comment_id") + "\" onclick=\"replyComment(this)\">Reply</button></td>");
+                            if (accountType != null && accountType.equals("user")) {
+                                out.println("<td width=\"5%\"><button type=\"button\" class=\"btn btn-info btn-sm\" data-comment-id=\"" + childCommentId + "\" data-parent-comment-id=\"" + childCommentResult.getInt("parent_comment_id") + "\" onclick=\"replyComment(this)\">Reply</button></td>");
+                            }
+                            out.println("<td></td>"); // Add an empty cell to keep the table structure
                         }
-                        out.println("</tr>");
+
                     }
                 }
             }
@@ -331,5 +338,4 @@
 </body>
 
 </html>
-
 
