@@ -215,7 +215,10 @@
         <tbody>
 
         <%
-
+            String authorTag = "";
+            if (accountType != null && accountType.equals("author")) {
+                authorTag = " - author";
+            }
             int currentUserId = -1;
             if (session.getAttribute("id") != null) {
                 currentUserId = (int) session.getAttribute("id");
@@ -256,7 +259,7 @@
                     likers = ""; // Set likers to an empty string if there are no likers
                 }
                 out.println(""
-                        + "<td width=\"25%\" class=\"text-secondary\">" + userRESULT.getString("surname") + " " + userRESULT.getString("name") + " said </td>"
+                        + "<td width=\"25%\" class=\"text-secondary\">" + userRESULT.getString("surname") + " " + userRESULT.getString("name") + authorTag + " said </td>"
                         + "<td width=\"55%\" data-parent-comment-text><i>" + commentContent + "</i></td>"
                         + "<td width=\"10%\">" + commentPostedOn + "</td>"
                         + "<td width=\"5%\"><button type=\"button\" id=\"like-" + commentId + "\" class=\"btn btn-primary btn-sm\" onclick=\"likeComment(" + commentId + ")\" title=\"" + likers + "\" " + ((accountType == null || accountType.equals("author")) ? "disabled" : "") + ">" + buttonText + "</button></td>"
@@ -308,7 +311,7 @@
                             childLikers = ""; // Set childLikers to an empty string if there are no likers
                         }
                         out.println("<tr id=\"comment-row-" + childCommentId + "\" data-parent-comment-id=\"" + parentCommentResult.getInt("comment_id") + "\" data-parent-comment-text=\"" + commentContent +"\" data-user-name=\"" + childUserRESULT.getString("surname") + " " + childUserRESULT.getString("name") + "\">"
-                                + "<td width=\"25%\" class=\"text-secondary\" data-reply-header=\"" + parentCommentResult.getInt("comment_id") + "\">" + childUserRESULT.getString("surname") + " " + childUserRESULT.getString("name") + " replied to: <i>" + commentContent + "</i></td>"
+                                + "<td width=\"25%\" class=\"text-secondary\" data-reply-header=\"" + parentCommentResult.getInt("comment_id") + "\">" + childUserRESULT.getString("surname") + " " + childUserRESULT.getString("name") + authorTag + " replied to: <i>" + commentContent + "</i></td>"
                                 + "<td width=\"55%\"><i>" + childCommentContent + "</i></td>"
                                 + "<td width=\"10%\">" + childCommentPostedOn + "</td>"
                                 + "<td width=\"5%\"><button type=\"button\" id=\"like-" + childCommentId + "\" class=\"btn btn-primary btn-sm\" onclick=\"likeComment(" + childCommentId + ")\" title=\"" + childLikers + "\" " + ((accountType == null || accountType.equals("author")) ? "disabled" : "") + ">" + childButtonText + "</button></td>");

@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="553ade07-8783-4310-a30f-0cbdfb1a98b8" name="Changes" comment="text area modified">
+    <list default="true" id="553ade07-8783-4310-a30f-0cbdfb1a98b8" name="Changes" comment="added edit button+ all bugs fixed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/displayComments.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/displayComments.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/javascript/scrips.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/javascript/scrips.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/submitReply.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/submitReply.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -280,7 +279,8 @@
       <workItem from="1682862959472" duration="11697000" />
       <workItem from="1683023900097" duration="77000" />
       <workItem from="1683024619448" duration="321000" />
-      <workItem from="1683040717060" duration="8475000" />
+      <workItem from="1683040717060" duration="8556000" />
+      <workItem from="1683099029068" duration="624000" />
     </task>
     <task id="LOCAL-00001" summary="1st commit- error in seeNews">
       <created>1680435768422</created>
@@ -331,7 +331,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682871288706</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="added edit button+ all bugs fixed">
+      <created>1683051283863</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1683051283863</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -369,6 +376,7 @@
     <MESSAGE value="userName and parentCommentText undefined" />
     <MESSAGE value="solved like button and reply bugs" />
     <MESSAGE value="text area modified" />
-    <option name="LAST_COMMIT_MESSAGE" value="text area modified" />
+    <MESSAGE value="added edit button+ all bugs fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="added edit button+ all bugs fixed" />
   </component>
 </project>

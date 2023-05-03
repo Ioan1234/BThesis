@@ -135,7 +135,8 @@ function createReplyElement(commentId, text, parentCommentText, postedOn, likers
 }
 function editComment(commentId) {
     const commentRow = document.getElementById("comment-row-" + commentId);
-    const commentContentElement = commentRow.querySelector("td[data-parent-comment-text] i");
+    const commentContentElement = commentRow.querySelector("td[data-parent-comment-text] i") || commentRow.querySelector("td:nth-child(2) i");
+
 
     // Change the comment's content to a textarea for editing
     const textarea = document.createElement("textarea");
