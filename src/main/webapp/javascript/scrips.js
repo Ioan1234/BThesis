@@ -1,3 +1,4 @@
+
 function likeComment(commentId) {
     event.preventDefault();
     var xhr = new XMLHttpRequest();
@@ -354,5 +355,58 @@ window.addEventListener('DOMContentLoaded', async () => {
     await displayRepliesOnLoad();
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector('.nav-link.text-white').addEventListener('click', function() {
+        var subscriptionModal = new bootstrap.Modal(document.getElementById('subscriptionModal'));
+        subscriptionModal.show();
+    });
 
+    // Change the navbar element when the "Subscribe" button in the modal is clicked
+    document.getElementById('subscribeButton').addEventListener('click', function() {
+        var navItem = document.querySelector('.nav-link.text-white');
+        navItem.textContent = 'Preferences';
+        var subscriptionModal = bootstrap.Modal.getInstance(document.getElementById('subscriptionModal'));
+        subscriptionModal.hide();
+    });
+});
+$(document).ready(function() {
+    $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").each(function(index) {
+            if (index !== 0) {
+                var rowText = $(this).text().toLowerCase();
+                var matchIndex = rowText.indexOf(value);
 
+                if (matchIndex !== -1) {
+                    // Remove existing highlights
+                    $(this).find('.searchable .highlight').each(function() {
+                        $(this).replaceWith($(this).text());
+                    });
+
+                    // Highlight the matched text by adding a span element with a class
+                    $(this).find('.searchable').each(function() {
+                        var cellHtml = $(this).html();
+                        var cellText = $(this).text().toLowerCase();
+                        var matchIndex = cellText.indexOf(value);
+
+                        if (matchIndex !== -1) {
+                            var matchedText = cellText.slice(matchIndex, matchIndex + value.length);
+                            var regex = new RegExp(escapeRegExp(matchedText), 'gi');
+                            var highlightedText = cellHtml.replace(regex, "<span class='highlight'>$&</span>");
+                            $(this).html(highlightedText);
+                        }
+                    });
+
+                    $(this).show();
+                }
+                else {
+                    $(this).hide();
+                }
+            }
+        });
+    });
+});
+
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}

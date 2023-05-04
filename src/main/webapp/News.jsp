@@ -9,6 +9,7 @@
 <%@ page import="java.util.Comparator" %>
 <%@ page import="java.util.Collections" %>
 <%@ page import="com.project.entities.DatabaseConnector" %>
+
 <%
 
     Connection conn = DatabaseConnector.getConnection();
@@ -23,6 +24,12 @@
     <title>News</title>
     <link rel="stylesheet" href="./css/utils.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Add jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="javascript/scrips.js"></script>
 </head>
 <body>
 
@@ -34,7 +41,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item active">
-                <a class="nav-link" href="#">News <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="News.jsp">News <span class="sr-only">(current)</span></a>
             </li>
             <% if(session.getAttribute("accountType") == null){ %>
             <li class="nav-item mx-3">
@@ -66,23 +73,43 @@
                             out.println("<strong>" + findUserRESULT.getString("surname") + " " + findUserRESULT.getString("name") + " - " + session.getAttribute("accountType") + "</strong>");
                         }
 
-
-
-
-
                     %>
 
                     <span class="sr-only">(current)</span></a>
             </li>
-
-            <% if(session.getAttribute("accountType") != null){ %>
-            <li class="nav-item mx-3">
-                <a class="nav-link" href="logout.jsp">Logout <span class="sr-only">(current)</span></a>
+            <!-- Add the "Subscribe to our services" element here -->
+            <% if(session.getAttribute("accountType") != null && !session.getAttribute("accountType").equals("author")) { %>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="#">Subscribe to our services</a>
             </li>
             <% } %>
         </ul>
+        <% if(session.getAttribute("accountType") != null){ %>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="logout.jsp">Logout <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        <% } %>
     </div>
 </nav>
+<div class="modal fade" id="subscriptionModal" tabindex="-1" aria-labelledby="subscriptionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="subscriptionModalLabel">Subscribe to our newsletter</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Would you like to subscribe to our newsletter?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="subscribeButton">Subscribe</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
     <% if(session.getAttribute("accountType") == "author") { %>
 
@@ -122,9 +149,9 @@
                 try {
                     out.println(
                             "<tr>" +
-                                    "<th>" + n.getNewsTitle() + "</th>" +
-                                    "<th>" + n.getNewsPostedOn() + "</th>" +
-                                    "<th>" + categoryNameRESULT.getString(1) + "</th>" +
+                                    "<th><span class='searchable'>" + n.getNewsTitle() + "</span></th>" +
+                                    "<th><span class='searchable'>" + n.getNewsPostedOn() + "</span></th>" +
+                                    "<th><span class='searchable'>" + categoryNameRESULT.getString(1) + "</span></th>" +
                                     "<th><a href=\"seeNews.jsp?id= " + n.getNewsId() + "\"><button class=\"btn bg-main text-white\">View</button></a></th>" +
                                     "</tr>"
                     );
@@ -134,19 +161,8 @@
             }
         %>
 
-
         </tbody>
     </table>
 </div>
-<script>
-    $(document).ready(function(){
-        $("#myInput").on("keyup", function() {
-            var value = $(this).val().toLowerCase();
-            $("#myTable tr").filter(function() {
-                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-            });
-        });
-    });
-</script>
 </body>
 </html>

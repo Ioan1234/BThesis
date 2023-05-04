@@ -13,3 +13,8 @@
 .btn-sm {
     font-size: 14px;
 }
+.highlight {
+    background-color: yellow;
+    font-weight: bold;
+}
+

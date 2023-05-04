@@ -56,6 +56,12 @@
     <title>View news</title>
     <link rel="stylesheet" href="./css/utils.css">
     <script src="javascript/scrips.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Add jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 
@@ -72,8 +78,7 @@
             </li>
             <% if(session.getAttribute("accountType") == null){ %>
             <li class="nav-item mx-3">
-                <a href="login.jsp?from=seeNews.jsp&news_id=<%= id %>" class="btn btn-warning">Login</a>
-
+                <a href="login.jsp?from=<%= request.getRequestURI() %>" class="btn btn-warning">Login</a>
             </li>
             <% } %>
             <li class="nav-item mx-5">
@@ -101,23 +106,42 @@
                             out.println("<strong>" + findUserRESULT.getString("surname") + " " + findUserRESULT.getString("name") + " - " + session.getAttribute("accountType") + "</strong>");
                         }
 
-
-
-
-
                     %>
 
                     <span class="sr-only">(current)</span></a>
             </li>
-
-            <% if(session.getAttribute("accountType") != null){ %>
-            <li class="nav-item mx-3">
-                <a class="nav-link" href="logout.jsp">Logout <span class="sr-only">(current)</span></a>
+            <!-- Add the "Subscribe to our services" element here -->
+            <% if(session.getAttribute("accountType") != null && !session.getAttribute("accountType").equals("author")) { %>
+            <li class="nav-item">
+                <a class="nav-link text-white" href="#">Subscribe to our services</a>
             </li>
             <% } %>
         </ul>
+        <% if(session.getAttribute("accountType") != null){ %>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="logout.jsp">Logout <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        <% } %>
     </div>
 </nav>
+<div class="modal fade" id="subscriptionModal" tabindex="-1" aria-labelledby="subscriptionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="subscriptionModalLabel">Subscribe to our newsletter</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Would you like to subscribe to our newsletter?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="subscribeButton">Subscribe</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="container m-5 p-2" style="max-width: 80%;">
 
@@ -215,10 +239,6 @@
         <tbody>
 
         <%
-            String authorTag = "";
-            if (accountType != null && accountType.equals("author")) {
-                authorTag = " - author";
-            }
             int currentUserId = -1;
             if (session.getAttribute("id") != null) {
                 currentUserId = (int) session.getAttribute("id");
@@ -259,7 +279,7 @@
                     likers = ""; // Set likers to an empty string if there are no likers
                 }
                 out.println(""
-                        + "<td width=\"25%\" class=\"text-secondary\">" + userRESULT.getString("surname") + " " + userRESULT.getString("name") + authorTag + " said </td>"
+                        + "<td width=\"25%\" class=\"text-secondary\">" + userRESULT.getString("surname") + " " + userRESULT.getString("name")  + " said </td>"
                         + "<td width=\"55%\" data-parent-comment-text><i>" + commentContent + "</i></td>"
                         + "<td width=\"10%\">" + commentPostedOn + "</td>"
                         + "<td width=\"5%\"><button type=\"button\" id=\"like-" + commentId + "\" class=\"btn btn-primary btn-sm\" onclick=\"likeComment(" + commentId + ")\" title=\"" + likers + "\" " + ((accountType == null || accountType.equals("author")) ? "disabled" : "") + ">" + buttonText + "</button></td>"
@@ -311,7 +331,7 @@
                             childLikers = ""; // Set childLikers to an empty string if there are no likers
                         }
                         out.println("<tr id=\"comment-row-" + childCommentId + "\" data-parent-comment-id=\"" + parentCommentResult.getInt("comment_id") + "\" data-parent-comment-text=\"" + commentContent +"\" data-user-name=\"" + childUserRESULT.getString("surname") + " " + childUserRESULT.getString("name") + "\">"
-                                + "<td width=\"25%\" class=\"text-secondary\" data-reply-header=\"" + parentCommentResult.getInt("comment_id") + "\">" + childUserRESULT.getString("surname") + " " + childUserRESULT.getString("name") + authorTag + " replied to: <i>" + commentContent + "</i></td>"
+                                + "<td width=\"25%\" class=\"text-secondary\" data-reply-header=\"" + parentCommentResult.getInt("comment_id") + "\">" + childUserRESULT.getString("surname") + " " + childUserRESULT.getString("name")  + " replied to: <i>" + commentContent + "</i></td>"
                                 + "<td width=\"55%\"><i>" + childCommentContent + "</i></td>"
                                 + "<td width=\"10%\">" + childCommentPostedOn + "</td>"
                                 + "<td width=\"5%\"><button type=\"button\" id=\"like-" + childCommentId + "\" class=\"btn btn-primary btn-sm\" onclick=\"likeComment(" + childCommentId + ")\" title=\"" + childLikers + "\" " + ((accountType == null || accountType.equals("author")) ? "disabled" : "") + ">" + childButtonText + "</button></td>");
