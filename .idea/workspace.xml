@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="553ade07-8783-4310-a30f-0cbdfb1a98b8" name="Changes" comment="edit for child comments fixed">
+    <list default="true" id="553ade07-8783-4310-a30f-0cbdfb1a98b8" name="Changes" comment="added better search function and subscribe navbar element">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/News.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/News.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/css/utils.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/css/utils.css" afterDir="false" />
@@ -285,7 +285,9 @@
       <workItem from="1683099029068" duration="944000" />
       <workItem from="1683139072816" duration="630000" />
       <workItem from="1683181801527" duration="866000" />
-      <workItem from="1683206542988" duration="8433000" />
+      <workItem from="1683206542988" duration="9128000" />
+      <workItem from="1683222236858" duration="131000" />
+      <workItem from="1683225779237" duration="2997000" />
     </task>
     <task id="LOCAL-00001" summary="1st commit- error in seeNews">
       <created>1680435768422</created>
@@ -350,7 +352,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683099973710</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="added better search function and subscribe navbar element">
+      <created>1683215198835</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1683215198836</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -390,6 +399,7 @@
     <MESSAGE value="text area modified" />
     <MESSAGE value="added edit button+ all bugs fixed" />
     <MESSAGE value="edit for child comments fixed" />
-    <option name="LAST_COMMIT_MESSAGE" value="edit for child comments fixed" />
+    <MESSAGE value="added better search function and subscribe navbar element" />
+    <option name="LAST_COMMIT_MESSAGE" value="added better search function and subscribe navbar element" />
   </component>
 </project>

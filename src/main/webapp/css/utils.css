@@ -17,4 +17,27 @@
     background-color: yellow;
     font-weight: bold;
 }
+.back-to-top {
+    position: fixed;
+    display: none;
+    width: 44px;
+    height: 44px;
+    text-align: center;
+    line-height: 1;
+    font-size: 22px;
+    right: 15px;
+    bottom: 15px;
+    transition: .5s;
+    background: #FF8C00;
+    border-radius: 44px;
+    z-index: 9;
+}
 
+.back-to-top i {
+    color: #ffffff;
+    padding-top: 10px;
+}
+
+.back-to-top:hover {
+    background: #4682B4;
+}
