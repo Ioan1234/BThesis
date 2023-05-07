@@ -13,37 +13,40 @@
 
 
 <%
-    Connection conn =DatabaseConnector.getConnection();
+    Connection conn = DatabaseConnector.getConnection();
 
     String accountType = (String) session.getAttribute("accountType");
     String id = (String)request.getParameter("id");
 
     PreparedStatement ps = conn.prepareStatement("SELECT * FROM news WHERE news_id=" + id);
+    ResultSet result = ps.executeQuery();
+
     // Fetch parent comments
     PreparedStatement parentComment = conn.prepareStatement("SELECT c.*, COUNT(cl.user_id) as like_count, GROUP_CONCAT(CASE WHEN u.surname IS NOT NULL THEN CONCAT(u.surname, ' ', u.name) WHEN a.surname IS NOT NULL THEN CONCAT(a.surname, ' ', a.name) END SEPARATOR ', ') as likers FROM comments c LEFT JOIN comment_likes cl ON c.comment_id = cl.comment_id LEFT JOIN users u ON cl.user_id = u.user_id LEFT JOIN authors a ON cl.user_id = a.author_id WHERE c.news_id=" + id + " AND c.availability = 1 AND c.parent_comment_id IS NULL GROUP BY c.comment_id, c.date_posted_on ORDER BY c.date_posted_on DESC");
 
-// Fetch child comments (replies)
+    // Fetch child comments (replies)
     PreparedStatement childComment = conn.prepareStatement("SELECT c.*, COUNT(cl.user_id) as like_count, GROUP_CONCAT(CASE WHEN u.surname IS NOT NULL THEN CONCAT(u.surname, ' ', u.name) WHEN a.surname IS NOT NULL THEN CONCAT(a.surname, ' ', a.name) END SEPARATOR ', ') as likers FROM comments c LEFT JOIN comment_likes cl ON c.comment_id = cl.comment_id LEFT JOIN users u ON cl.user_id = u.user_id LEFT JOIN authors a ON cl.user_id = a.author_id WHERE c.news_id=" + id + " AND c.availability = 1 AND c.parent_comment_id IS NOT NULL GROUP BY c.comment_id, c.date_posted_on ORDER BY c.date_posted_on ASC", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
-
-
-
     PreparedStatement totalComments = conn.prepareStatement("SELECT COUNT(*) FROM comments WHERE news_id=" + id + " AND availability = 1");
-    ResultSet result = ps.executeQuery();
     ResultSet parentCommentResult = parentComment.executeQuery();
     ResultSet childCommentResult = childComment.executeQuery();
     ResultSet totalCommentsRESULT = totalComments.executeQuery();
+
     int noComments = 0;
     String newsTitle = "";
     String newsContent = "";
     Date postedOn = null;
-    if(result.next()&&totalCommentsRESULT.next()) {
+    int categoryId = 0; // Declare the categoryId variable here
+
+    if(result.next() && totalCommentsRESULT.next()) {
         noComments = totalCommentsRESULT.getInt(1);
         newsTitle = result.getString("news_title");
         newsContent = result.getString("news_content");
         postedOn = result.getDate("news_posted_on");
+        categoryId = result.getInt("category_id"); // Fetch the category_id from the news table
     }
 %>
+
 
 
 
@@ -56,7 +59,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-    <link href="stil.css" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
@@ -102,6 +104,8 @@
 
                             ResultSet findUserRESULT = findUser.executeQuery();
                             findUserRESULT.next();
+                            int userId = findUserRESULT.getInt("user_id");
+                            session.setAttribute("userId", userId);
 
                             out.println("<strong>" + findUserRESULT.getString("surname") + " " + findUserRESULT.getString("name") + " - " + session.getAttribute("accountType") + "</strong>");
                         }
@@ -113,9 +117,11 @@
             <!-- Add the "Subscribe to our services" element here -->
             <% if(session.getAttribute("accountType") != null && !session.getAttribute("accountType").equals("author")) { %>
             <li class="nav-item">
-                <a class="nav-link text-white" href="#">Subscribe to our services</a>
+                <a class="nav-link text-white" href="#" id="subscribeServicesLink">Subscribe to our services</a>
             </li>
             <% } %>
+
+
         </ul>
         <% if(session.getAttribute("accountType") != null){ %>
         <ul class="navbar-nav ml-auto">
@@ -134,7 +140,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Would you like to subscribe to our newsletter?
+                You will gain access to save any of your preferred news
+                and receive notifications about them. Would you like to subscribe to our newsletter?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="subscribeButton">Subscribe</button>
@@ -150,6 +157,18 @@
             <p class="h2"><%=newsTitle %></p>
 
             <p class="h5 mt-2 p-4"><%=newsContent%></p>
+
+            <% if (session.getAttribute("accountType") != null) { %>
+            <button id="addToPrefBtn" class="btn btn-primary" onclick="addToPreferences(<%=session.getAttribute("userId")%>, '<%=id%>', '<%=categoryId%>')">
+
+            <i class="fas fa-bookmark"></i> Add to preferences
+            </button>
+            <% } %>
+
+
+            <br><br>
+
+
 
             <em class="mt-1"><%=postedOn%>, posted by <%
 
@@ -357,6 +376,59 @@
 
 
     <a href="#" class="back-to-top" id="myBtn"><i class="fa fa-chevron-up"></i></a>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Find the "Subscribe" nav link and attach the event listener
+            var navLink = document.querySelector('.nav-link.text-white');
+            if (navLink) {
+                navLink.addEventListener('click', function() {
+                    var subscriptionModal = new bootstrap.Modal(document.getElementById('subscriptionModal'));
+                    subscriptionModal.show();
+                });
+            }
+
+            // Check if the current URL contains "preferences.jsp"
+            if (window.location.href.includes('preferences.jsp')) {
+                updateNavbarItem('Preferences');
+            }
+
+            // Change the navbar element when the "Subscribe" button in the modal is clicked
+            var subscribeButton = document.getElementById('subscribeButton');
+            if (subscribeButton) {
+                subscribeButton.addEventListener('click', function() {
+                    updateNavbarItem('Preferences');
+                    var subscriptionModal = bootstrap.Modal.getInstance(document.getElementById('subscriptionModal'));
+                    subscriptionModal.hide();
+                });
+            } else {
+                console.error("Subscribe button not found");
+            }
+
+            function updateNavbarItem(newText) {
+                var navItem = document.querySelector('.nav-link.text-white');
+                if (navItem) {
+                    navItem.textContent = newText;
+                    navItem.setAttribute('id', 'preferencesLink');
+
+                    // Add the event listener for the "Preferences" nav item
+                    navItem.addEventListener('click', function(event) {
+                        if (event.target.textContent === 'Preferences') {
+                            // Hide any open modals before navigating
+                            var openModals = document.querySelectorAll('.modal.show');
+                            openModals.forEach(function(modal) {
+                                var modalInstance = bootstrap.Modal.getInstance(modal);
+                                modalInstance.hide();
+                            });
+
+                            window.location.href = 'preferences.jsp';
+                        }
+                    });
+                }
+            }
+        });
+
+
+    </script>
 
 </body>
 

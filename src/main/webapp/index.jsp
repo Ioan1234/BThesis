@@ -1,58 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<!DOCTYPE html>
-
-<html>
-<head>
-  <meta charset="utf-8">
-  <title> Sign in</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <style>
-    .loader-container {
-      position: fixed;
-      display: none;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      background-color: rgba(0, 0, 0, 0.7);
-      z-index: 9999;
-    }
-
-    .loader {
-      border: 16px solid #f3f3f3;
-      border-radius: 50%;
-      border-top: 16px solid #3498db;
-      width: 120px;
-      height: 120px;
-      -webkit-animation: spin 2s linear infinite;
-      animation: spin 2s linear infinite;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      margin: -60px 0 0 -60px;
-    }
-
-    @-webkit-keyframes spin {
-      0% {
-        -webkit-transform: rotate(0deg);
-      }
-      100% {
-        -webkit-transform: rotate(360deg);
-      }
-    }
-
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-  </style>
-
-</head>
-
+<%@ page import="java.security.MessageDigest" %>
+<%@ page import="java.security.NoSuchAlgorithmException" %>
+<%@ page import="java.nio.charset.StandardCharsets" %>
 <%@page import="java.util.*"%>
 <%@page import="java.sql.*"%>
 <%@page import="java.util.concurrent.TimeUnit"%>
@@ -64,8 +13,31 @@
 <%@page import="jakarta.servlet.http.HttpSession"%>
 <%@ page import="com.project.entities.DatabaseConnector" %>
 
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title> Sign in</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="./css/utils.css">
+
+</head>
+<%!
+private static String hashPassword(String password) {
+    try {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(hash);
+    } catch (NoSuchAlgorithmException e) {
+        throw new RuntimeException(e);
+    }
+}
+ %>
+
 
   <%
+
   Connection conn = DatabaseConnector.getConnection();
   String msg = "";
 
@@ -74,6 +46,7 @@
     String name = request.getParameter("name");
     String email = request.getParameter("email");
     String password = request.getParameter("password");
+  String hashedPassword = hashPassword(password);
     PreparedStatement userList = null;
     try {
       userList = conn.prepareStatement("SELECT email, password FROM users");
@@ -115,11 +88,11 @@
       String insert = "INSERT INTO users (surname, name, email, password, active, subscribed) VALUES (?,?,?,?,1,1)";
       PreparedStatement stmt = null;
       try {
-        stmt = conn.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS);
-        stmt.setString(1, surname);
-        stmt.setString(2, name);
-        stmt.setString(3, email);
-        stmt.setString(4, password);
+    stmt = conn.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS);
+    stmt.setString(1, surname);
+    stmt.setString(2, name);
+    stmt.setString(3, email);
+    stmt.setString(4, hashedPassword);
         stmt.executeUpdate();
         ResultSet rs = stmt.getGeneratedKeys();
         if (rs.next()) {

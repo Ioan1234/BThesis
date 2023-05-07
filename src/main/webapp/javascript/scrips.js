@@ -355,25 +355,10 @@ window.addEventListener('DOMContentLoaded', async () => {
     await displayRepliesOnLoad();
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Attach the event listener to the parent element using event delegation
-    document.body.addEventListener('click', function(event) {
-        if (event.target.matches('.nav-link.text-white')) {
-            var subscriptionModal = new bootstrap.Modal(document.getElementById('subscriptionModal'));
-            subscriptionModal.show();
-        }
-    });
 
-    // Change the navbar element when the "Subscribe" button in the modal is clicked
-    document.getElementById('subscribeButton').addEventListener('click', function() {
-        var navItem = document.querySelector('.nav-link.text-white');
-        if (navItem) {
-            navItem.textContent = 'Preferences';
-        }
-        var subscriptionModal = bootstrap.Modal.getInstance(document.getElementById('subscriptionModal'));
-        subscriptionModal.hide();
-    });
-});
+
+
+
 
 $(document).ready(function() {
     $("#myInput").on("keyup", function() {
@@ -434,3 +419,24 @@ document.addEventListener('DOMContentLoaded', function() {
         document.documentElement.scrollTop = 0;
     }
 });
+function addToPreferences(userId, newsId, categoryId) {
+    // Ensure userId is a number.
+    if (typeof userId !== 'number' || categoryId === null || categoryId === 'null' || newsId === null || newsId === 'null') {
+        console.error('One or more attribute values are null:', userId, categoryId, newsId);
+        return;
+    }
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "preferences.jsp", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.send(`userId=${encodeURIComponent(userId)}&categoryId=${encodeURIComponent(categoryId)}&newsId=${encodeURIComponent(newsId)}`);
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Handle the response, e.g., show a success message or update the UI
+        }
+    };
+}
+
+
+

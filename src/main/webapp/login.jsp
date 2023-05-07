@@ -1,11 +1,4 @@
 <%@page session="true" %>
-
-<html>
-<head>
-    <meta charset="utf-8">
-    <title> Login </title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
 <%@page import="java.sql.*"%>
 
 <%@ page import = "org.json.simple.JSONObject" %>
@@ -13,111 +6,135 @@
 <%@ page import = "org.json.simple.parser.*" %>
 <%@page import="java.io.FileReader"%>
 <%@ page import="com.project.entities.DatabaseConnector" %>
+<%@ page import="java.security.MessageDigest" %>
+<%@ page import="java.nio.charset.StandardCharsets" %>
+<%@ page import="java.security.NoSuchAlgorithmException" %>
+<%@ page import="java.util.Base64" %>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title> Login </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<%! private static String hashPassword(String password) {
+    try {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(hash);
+    } catch (NoSuchAlgorithmException e) {
+        throw new RuntimeException(e);
+    }
+} %>
 
 
 <%
-    Connection conn = DatabaseConnector.getConnection();
+        Connection conn = DatabaseConnector.getConnection();
 
-    String msg = "";
-    boolean found = false;
+        String msg = "";
+        boolean found = false;
 
-    String email = "";
-    String password = "";
-    String redirectPage = "News.jsp";
+        String email = "";
+        String password = "";
+    String hashedPassword = ""; // declare hashedPassword variable here
+        String redirectPage = "News.jsp";
 
-    int newsId = -1;
-    if (request.getParameter("news_id") != null) {
-        try {
-            newsId = Integer.parseInt(request.getParameter("news_id"));
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
+        int newsId = -1;
+        if (request.getParameter("news_id") != null) {
+            try {
+                newsId = Integer.parseInt(request.getParameter("news_id"));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
         }
-    }
-    if ("POST".equals(request.getMethod())) {
+    // Hash the password from the request
 
-        email = request.getParameter("email");
-        password = request.getParameter("password");
-        if (request.getParameter("from") != null) {
-            redirectPage = request.getParameter("from");
-        }
+        if ("POST".equals(request.getMethod())) {
 
-        PreparedStatement stmt = conn.prepareStatement("SELECT email, password FROM users");
-        ResultSet rs = stmt.executeQuery();
+            email = request.getParameter("email");
+            password = request.getParameter("password");
+            hashedPassword = hashPassword(password);
+            if (request.getParameter("from") != null) {
+                redirectPage = request.getParameter("from");
+            }
 
-        while(rs.next())
-        {
-            if(rs.getString("email").equals(email) && rs.getString("password").equals(password))
-            {
-                msg="Authentication successful.";
-                found=true;
-                session.setAttribute("loggedIn", true);
-                session.setAttribute("accountType", "user");
+
+
+            PreparedStatement stmt = conn.prepareStatement("SELECT email, password FROM users");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                if (rs.getString("email").equals(email) && rs.getString("password").equals(hashedPassword)) {
+                    msg = "Authentication successful.";
+                    found = true;
+                    session.setAttribute("loggedIn", true);
+                    session.setAttribute("accountType", "user");
+                }
+            }
+
+            if (!found) {
+                PreparedStatement authorList = conn.prepareStatement("Select email, password from authors");
+                ResultSet authorListRESULT = authorList.executeQuery();
+
+                while (authorListRESULT.next()) {
+                    if (authorListRESULT.getString("email").equals(email) && authorListRESULT.getString("password").equals(hashedPassword)) {
+                        msg = "Authentication successful.";
+                        found = true;
+                        session.setAttribute("loggedIn", true);
+                        session.setAttribute("accountType", "author");
+                    }
+                }
+            }
+
+
+            if (!found) {
+                msg = "Wrong email or password!";
             }
         }
 
-        if(!found){
-            PreparedStatement authorList= conn.prepareStatement("Select email,password from authors");
-            ResultSet authorListRESULT=authorList.executeQuery();
+        if (msg.equals("Authentication successful.")) {
+            session.setAttribute("email", email);
+            session.setAttribute("password", password);
 
-            while(authorListRESULT.next())
-            {
-                if(authorListRESULT.getString("email").equals(email) && authorListRESULT.getString("password").equals(password))
-                {
-                    msg="Authentication successful.";
-                    found=true;
-                    session.setAttribute("loggedIn", true);
-                    session.setAttribute("accountType", "author");
+            if (session.getAttribute("accountType").equals("user")) {
+                PreparedStatement getID = conn.prepareStatement("SELECT user_id FROM users WHERE email=? AND password = ?");
+                getID.setString(1, email);
+                getID.setString(2, hashedPassword);
+
+                ResultSet getIDRESULT = getID.executeQuery();
+
+                getIDRESULT.next();
+
+                int id = getIDRESULT.getInt(1);
+
+                session.setAttribute("id", id);
+
+                if (newsId != -1) {
+                    response.sendRedirect("seeNews.jsp?id=" + newsId);
+                } else {
+                    response.sendRedirect("News.jsp");
+                }
+
+            } else if (session.getAttribute("accountType").equals("author")) {
+                PreparedStatement getID = conn.prepareStatement("SELECT author_id FROM authors WHERE email=? AND password = ?");
+                getID.setString(1, email);
+                getID.setString(2, hashedPassword);
+
+                ResultSet getIDRESULT = getID.executeQuery();
+
+                getIDRESULT.next();
+
+                int id = getIDRESULT.getInt(1);
+
+                session.setAttribute("id", id);
+
+                if (newsId != -1) {
+                    response.sendRedirect("seeNews.jsp?id=" + newsId);
+                } else {
+                    response.sendRedirect("News.jsp");
                 }
             }
         }
-        if (!found) {
-            msg = "Wrong email or password!";
-        }
-    }
-
-    if (msg.equals("Authentication successful.")) {
-        session.setAttribute("email", email);
-        session.setAttribute("password", password);
-
-        if (session.getAttribute("accountType").equals("user")) {
-            PreparedStatement getID = conn.prepareStatement("SELECT user_id FROM users WHERE email=? AND password = ?");
-            getID.setString(1, email);
-            getID.setString(2, password);
-
-            ResultSet getIDRESULT = getID.executeQuery();
-
-            getIDRESULT.next();
-
-            int id = getIDRESULT.getInt(1);
-
-            session.setAttribute("id", id);
-
-            if (newsId != -1) {
-                response.sendRedirect("seeNews.jsp?id=" + newsId);
-            } else {
-                response.sendRedirect("News.jsp");
-            }
-
-        } else if (session.getAttribute("accountType").equals("author")) {
-            PreparedStatement getID = conn.prepareStatement("SELECT author_id FROM authors WHERE email=? AND password = ?");
-            getID.setString(1, email);
-            getID.setString(2, password);
-
-            ResultSet getIDRESULT = getID.executeQuery();
-
-            getIDRESULT.next();
-
-            int id = getIDRESULT.getInt(1);
-
-            session.setAttribute("id", id);
-
-            if (newsId != -1) {
-                response.sendRedirect("seeNews.jsp?id=" + newsId);
-            } else {
-                response.sendRedirect("News.jsp");
-            }
-        }
-    }
 %>
 
 
@@ -135,23 +152,15 @@
                             <form  method="POST">
                                 <input type="hidden" name="from" value="News.jsp">
 
-
-
-
                                 <div class="form-outline mb-4">
                                     <input type="email" id="form3Example3cg" class="form-control form-control-lg" name="email" required/>
                                     <label class="form-label" for="form3Example3cg" >Your Email</label>
                                 </div>
 
-
                                 <div class="form-outline mb-4">
                                     <input type="password" id="form3Example1cg" class="form-control form-control-lg" name="password" required />
                                     <label class="form-label" for="form3Example1cg">Your Password</label>
                                 </div>
-
-
-
-
 
                                 <div class="d-flex justify-content-center">
                                     <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body" name="submit">Login</button>
@@ -166,69 +175,6 @@
                                         out.print(" <div class=\"alert alert-danger mt-2  \" role=\"alert\">"+
                                                 "      Wrong email or password! "+"</div>");
 
-                                    }
-
-                                    if(msg.equals("Authentication sucessful.")){
-
-
-                                        session.setAttribute("email", email);
-                                        session.setAttribute("password", password);
-
-
-
-                                        if (session.getAttribute("accountType").equals("user")) {
-                                            PreparedStatement getID = conn.prepareStatement("SELECT user_id FROM users WHERE email=? AND password = ?");
-                                            getID.setString(1, email);
-                                            getID.setString(2, password);
-
-                                            ResultSet getIDRESULT = getID.executeQuery();
-
-                                            getIDRESULT.next();
-
-                                            int id = getIDRESULT.getInt(1);
-
-                                            session.setAttribute("id", id);
-
-                                            if ("News.jsp".equals(redirectPage)) {
-
-                                            } else if ("seeNews.jsp".equals(redirectPage)) {
-                                                if (newsId != -1) {
-                                                    session.setAttribute("redirectPage", "seeNews.jsp?id=" + newsId);
-                                                } else {
-                                                    session.setAttribute("redirectPage", "News.jsp");
-                                                }
-                                            } else {
-                                                session.setAttribute("redirectPage", redirectPage);
-                                            }
-                                            response.sendRedirect((String) session.getAttribute("redirectPage"));
-
-
-                                        } else if (session.getAttribute("accountType").equals("author")) {
-
-                                            PreparedStatement getID = conn.prepareStatement("SELECT author_id FROM authors WHERE email=? AND password = ?");
-                                            getID.setString(1, email);
-                                            getID.setString(2, password);
-
-                                            ResultSet getIDRESULT = getID.executeQuery();
-
-                                            getIDRESULT.next();
-
-                                            int id = getIDRESULT.getInt(1);
-
-                                            session.setAttribute("id", id);
-
-                                            if ("News.jsp".equals(redirectPage)) {
-                                                response.sendRedirect("News.jsp");
-                                            } else if ("seeNews.jsp".equals(redirectPage)) {
-                                                if (newsId != -1) {
-                                                    response.sendRedirect("seeNews.jsp?id=" + newsId);
-                                                } else {
-                                                    response.sendRedirect("News.jsp");
-                                                }
-                                            } else {
-                                                response.sendRedirect("News.jsp");
-                                            }
-                                        }
                                     }
 
                                 %>

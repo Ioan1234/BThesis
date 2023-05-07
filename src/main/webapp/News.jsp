@@ -25,7 +25,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-    <link href="stil.css" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
@@ -81,7 +80,7 @@
             <!-- Add the "Subscribe to our services" element here -->
             <% if(session.getAttribute("accountType") != null && !session.getAttribute("accountType").equals("author")) { %>
             <li class="nav-item">
-                <a class="nav-link text-white" href="#">Subscribe to our services</a>
+                <a class="nav-link text-white" href="#" id="subscribeServicesLink">Subscribe to our services</a>
             </li>
             <% } %>
         </ul>
@@ -102,7 +101,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Would you like to subscribe to our newsletter?
+                You will gain access to save any of your preferred news
+                and receive notifications about them. Would you like to subscribe to our newsletter?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="subscribeButton">Subscribe</button>
@@ -166,5 +166,59 @@
     </table>
 </div>
 <a href="#" class="back-to-top" id="myBtn"><i class="fa fa-chevron-up"></i></a>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Find the "Subscribe" nav link and attach the event listener
+        var navLink = document.querySelector('.nav-link.text-white');
+        if (navLink) {
+            navLink.addEventListener('click', function() {
+                var subscriptionModal = new bootstrap.Modal(document.getElementById('subscriptionModal'));
+                subscriptionModal.show();
+            });
+        }
+
+        // Check if the current URL contains "preferences.jsp"
+        if (window.location.href.includes('preferences.jsp')) {
+            updateNavbarItem('Preferences');
+        }
+
+        // Change the navbar element when the "Subscribe" button in the modal is clicked
+        var subscribeButton = document.getElementById('subscribeButton');
+        if (subscribeButton) {
+            subscribeButton.addEventListener('click', function() {
+                updateNavbarItem('Preferences');
+                var subscriptionModal = bootstrap.Modal.getInstance(document.getElementById('subscriptionModal'));
+                subscriptionModal.hide();
+            });
+        } else {
+            console.error("Subscribe button not found");
+        }
+
+        function updateNavbarItem(newText) {
+            var navItem = document.querySelector('.nav-link.text-white');
+            if (navItem) {
+                navItem.textContent = newText;
+                navItem.setAttribute('id', 'preferencesLink');
+
+                // Add the event listener for the "Preferences" nav item
+                navItem.addEventListener('click', function(event) {
+                    if (event.target.textContent === 'Preferences') {
+                        // Hide any open modals before navigating
+                        var openModals = document.querySelectorAll('.modal.show');
+                        openModals.forEach(function(modal) {
+                            var modalInstance = bootstrap.Modal.getInstance(modal);
+                            modalInstance.hide();
+                        });
+
+                        window.location.href = 'preferences.jsp';
+                    }
+                });
+            }
+        }
+    });
+
+
+
+</script>
 </body>
 </html>
