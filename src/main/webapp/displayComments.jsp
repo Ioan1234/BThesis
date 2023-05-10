@@ -124,9 +124,14 @@
                 <a class="nav-link text-white" href="preferences.jsp">Preferences</a>
             </li>
             <% } %>
-
-
+            <% if(session.getAttribute("accountType") != null && !session.getAttribute("accountType").equals("author")){ %>
+            <li class="nav-item">
+                <a class="nav-link text-white nav-item-transition" href="#" id="joinTeamNavLink" data-bs-toggle="modal" data-bs-target="#joinTeamModal">Want to join our team?</a>
+            </li>
+            <% } %>
         </ul>
+
+
         <% if(session.getAttribute("accountType") != null){ %>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
@@ -142,7 +147,6 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="subscriptionModalLabel">Subscribe to our newsletter</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
-
             </div>
             <div class="modal-body">
                 You will gain access to save any of your preferred news
@@ -150,6 +154,22 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="subscribeButton">Subscribe</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="joinTeamModal" tabindex="-1" aria-labelledby="joinTeamModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="joinTeamModalLabel">Join our team</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                By joining our team, you agree to our privacy policy.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="goToFormButton">Take me to the form</button>
             </div>
         </div>
     </div>
@@ -441,6 +461,12 @@
                 }
             } catch (error) {
                 console.error("Error:", error.message);
+            }
+            const goToFormButton = document.getElementById('goToFormButton');
+            if (goToFormButton) {
+                goToFormButton.addEventListener('click', function() {
+                    window.location.href = 'authorForm.jsp';
+                });
             }
         });
 
