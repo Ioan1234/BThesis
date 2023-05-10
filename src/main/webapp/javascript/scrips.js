@@ -419,23 +419,80 @@ document.addEventListener('DOMContentLoaded', function() {
         document.documentElement.scrollTop = 0;
     }
 });
-function addToPreferences(userId, newsId, categoryId) {
-    // Ensure userId is a number.
-    if (typeof userId !== 'number' || categoryId === null || categoryId === 'null' || newsId === null || newsId === 'null') {
-        console.error('One or more attribute values are null:', userId, categoryId, newsId);
-        return;
+async function addToPreferences(userId, newsId, categoryId) {
+    try {
+        const response = await fetch('addPreference.jsp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                user_id: userId,
+                news_id: newsId,
+                category_id: categoryId
+            })
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+
+            if (result.status === 'success') {
+                displaySuccessMessage(document.body, 'Successfully added to preferences');
+            } else {
+                displayErrorMessage(document.body, result.message);
+            }
+        } else {
+            displayErrorMessage(document.body, 'Failed to add preference. Please try again.');
+        }
+    } catch (error) {
+        displayErrorMessage(document.body, error.message);
+    }
+}
+
+function displaySuccessMessage(targetElement, message) {
+    const successMessage = document.createElement('div');
+    successMessage.classList.add('alert', 'alert-success');
+    successMessage.textContent = message;
+    successMessage.style.position = 'absolute';
+    successMessage.style.zIndex = 1000;
+    successMessage.style.display = 'inline-block';
+
+    // Remove the existing success message if it exists
+    const existingSuccessMessage = targetElement.querySelector('.alert-success');
+    if (existingSuccessMessage) {
+        targetElement.removeChild(existingSuccessMessage);
     }
 
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "preferences.jsp", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.send(`userId=${encodeURIComponent(userId)}&categoryId=${encodeURIComponent(categoryId)}&newsId=${encodeURIComponent(newsId)}`);
+    // Insert the success message as the first child of the target element
+    targetElement.insertBefore(successMessage, targetElement.firstChild);
 
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Handle the response, e.g., show a success message or update the UI
-        }
-    };
+    // Automatically remove the message after 3 seconds
+    setTimeout(function() {
+        successMessage.remove();
+    }, 3000);
+}
+
+function displayErrorMessage(targetElement, message) {
+    const errorMessage = document.createElement('div');
+    errorMessage.classList.add('alert', 'alert-danger');
+    errorMessage.textContent = message;
+    errorMessage.style.position = 'absolute';
+    errorMessage.style.zIndex = 1000;
+    errorMessage.style.display = 'inline-block';
+
+    // Remove the existing error message if it exists
+    const existingErrorMessage = targetElement.querySelector('.alert-danger');
+    if (existingErrorMessage) {
+        targetElement.removeChild(existingErrorMessage);
+    }
+
+    // Insert the error message as the first child of the target element
+    targetElement.insertBefore(errorMessage, targetElement.firstChild);
+
+    // Automatically remove the message after 3 seconds
+    setTimeout(function() {
+        errorMessage.remove();
+    }, 3000);
 }
 
 

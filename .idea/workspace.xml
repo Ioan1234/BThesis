@@ -4,14 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="553ade07-8783-4310-a30f-0cbdfb1a98b8" name="Changes" comment="solved some bugs and added back to top button">
+    <list default="true" id="553ade07-8783-4310-a30f-0cbdfb1a98b8" name="Changes" comment="added password encryption but reference bug">
+      <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/News.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/News.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/css/utils.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/css/utils.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/displayComments.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/displayComments.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/javascript/scrips.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/javascript/scrips.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/login.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +93,7 @@
     &quot;database.data.extractors.current.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
     &quot;git-widget-placeholder&quot;: &quot;ppppp&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/gogul/IdeaProjects/Hw2&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/gogul/IdeaProjects/project&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -296,7 +297,13 @@
       <workItem from="1683385664907" duration="1317000" />
       <workItem from="1683387111119" duration="1341000" />
       <workItem from="1683393031639" duration="2395000" />
-      <workItem from="1683464127534" duration="7632000" />
+      <workItem from="1683464127534" duration="7843000" />
+      <workItem from="1683539089676" duration="537000" />
+      <workItem from="1683542998303" duration="1274000" />
+      <workItem from="1683568240226" duration="3148000" />
+      <workItem from="1683628985870" duration="698000" />
+      <workItem from="1683642298890" duration="14911000" />
+      <workItem from="1683706890935" duration="7446000" />
     </task>
     <task id="LOCAL-00001" summary="1st commit- error in seeNews">
       <created>1680435768422</created>
@@ -375,7 +382,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683228885851</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="added password encryption but reference bug">
+      <created>1683473603740</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1683473603740</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -417,6 +431,7 @@
     <MESSAGE value="edit for child comments fixed" />
     <MESSAGE value="added better search function and subscribe navbar element" />
     <MESSAGE value="solved some bugs and added back to top button" />
-    <option name="LAST_COMMIT_MESSAGE" value="solved some bugs and added back to top button" />
+    <MESSAGE value="added password encryption but reference bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="added password encryption but reference bug" />
   </component>
 </project>

@@ -83,31 +83,40 @@ private static String hashPassword(String password) {
     }
 
     if (emailExists && passwordExists) {
-      msg = "An account is already linked with this email address!";
-    } else {
-      String insert = "INSERT INTO users (surname, name, email, password, active, subscribed) VALUES (?,?,?,?,1,1)";
-      PreparedStatement stmt = null;
-      try {
-    stmt = conn.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS);
-    stmt.setString(1, surname);
-    stmt.setString(2, name);
-    stmt.setString(3, email);
-    stmt.setString(4, hashedPassword);
-        stmt.executeUpdate();
-        ResultSet rs = stmt.getGeneratedKeys();
-        if (rs.next()) {
-          int id = rs.getInt(1);
-          System.out.println("Generated user ID: " + id);
-        }
-      } catch (SQLException e) {
-        throw new RuntimeException(e);
-      }
-      msg = "Authentication successful.";
+  msg = "An account is already linked with this email address!";
+} else {
+  String insert = "INSERT INTO users (surname, name, email, password, active, subscribed) VALUES (?,?,?,?,1,0)";
+  PreparedStatement stmt = null;
+  try {
+stmt = conn.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS);
+stmt.setString(1, surname);
+stmt.setString(2, name);
+stmt.setString(3, email);
+stmt.setString(4, hashedPassword);
+    stmt.executeUpdate();
+    ResultSet rs = stmt.getGeneratedKeys();
+    if (rs.next()) {
+      int id = rs.getInt(1);
+      System.out.println("Generated user ID: " + id);
+    }
+  } catch (SQLException e) {
+    throw new RuntimeException(e);
+  }
+  msg = "Authentication successful.";
 
-      HttpSession session1 = request.getSession();
-      session1.setAttribute("user", email);
+  HttpSession session1 = request.getSession();
+  session1.setAttribute("user", email);
 
-      out.print("<div id='loader' style='display:none;'><h3>Authentication successful. Redirecting you to the news page...</h3></div>");
+  out.print("<div id='loader' style='display:none;'><h3>Authentication successful. Redirecting you to the news page...</h3></div>");
+  String redirectTo = (String) request.getSession().getAttribute("lastPageBeforeLogin");
+
+  if (redirectTo == null || redirectTo.isEmpty()) {
+    redirectTo = "News.jsp";
+  }
+
+  out.print("<script>document.getElementById('loader-container').style.display = 'block'; setTimeout(function() { window.location.href = '" + redirectTo + "'; }, 2000);</script>");
+}
+
       String redirectTo = (String) request.getSession().getAttribute("lastPageBeforeLogin");
 
       if (redirectTo == null || redirectTo.isEmpty()) {
@@ -115,7 +124,6 @@ private static String hashPassword(String password) {
       }
 
       out.print("<script>document.getElementById('loader-container').style.display = 'block'; setTimeout(function() { window.location.href = '" + redirectTo + "'; }, 2000);</script>");
-    }
   }
 %>
 

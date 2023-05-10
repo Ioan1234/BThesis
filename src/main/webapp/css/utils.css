@@ -83,3 +83,6 @@
         transform: rotate(360deg);
     }
 }
+.nav-item-transition {
+    transition: opacity 0.2s ease-in-out;
+}

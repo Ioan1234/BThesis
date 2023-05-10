@@ -61,7 +61,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="javascript/scrips.js"></script>
 
 </head>
@@ -117,7 +118,10 @@
             <!-- Add the "Subscribe to our services" element here -->
             <% if(session.getAttribute("accountType") != null && !session.getAttribute("accountType").equals("author")) { %>
             <li class="nav-item">
-                <a class="nav-link text-white" href="#" id="subscribeServicesLink">Subscribe to our services</a>
+                <a class="nav-link text-white nav-item-transition" href="#" id="subscribeServicesNavLink" data-bs-toggle="modal" data-bs-target="#subscriptionModal">Subscribe to our services</a>
+            </li>
+            <li class="nav-item nav-item-transition" id="preferencesNavItem" style="display: none;">
+                <a class="nav-link text-white" href="preferences.jsp">Preferences</a>
             </li>
             <% } %>
 
@@ -137,7 +141,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="subscriptionModalLabel">Subscribe to our newsletter</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>
+
             </div>
             <div class="modal-body">
                 You will gain access to save any of your preferred news
@@ -158,17 +163,39 @@
 
             <p class="h5 mt-2 p-4"><%=newsContent%></p>
 
-            <% if (session.getAttribute("accountType") != null) { %>
-            <button id="addToPrefBtn" class="btn btn-primary" onclick="addToPreferences(<%=session.getAttribute("userId")%>, '<%=id%>', '<%=categoryId%>')">
+            <% if (session.getAttribute("accountType") != null && session.getAttribute("accountType").equals("user")) { %>
+            <script>
+                document.addEventListener('DOMContentLoaded', async function () {
+                    const isSubscribed = await fetchSubscriptionStatus();
 
-            <i class="fas fa-bookmark"></i> Add to preferences
+                    if (isSubscribed) {
+                        const addToPrefBtn = document.getElementById('addToPrefBtn');
+                        addToPrefBtn.style.display = 'block';
+
+                        // Add event listener for the button
+                        addToPrefBtn.addEventListener('click', function() {
+                            const userId = parseInt('<%=session.getAttribute("userId")%>', 10);
+                            const newsId = '<%=id%>';
+                            const categoryId = '<%=categoryId%>';
+                            addToPreferences(userId, newsId, categoryId);
+                        });
+
+                        document.getElementById('subscribeServicesNavLink').style.display = 'none';
+                        document.getElementById('preferencesNavItem').style.display = 'block';
+                    } else {
+                        document.getElementById('addToPrefBtn').style.display = 'none';
+                        document.getElementById('subscribeServicesNavLink').style.display = 'block';
+                        document.getElementById('preferencesNavItem').style.display = 'none';
+                    }
+                });
+
+            </script>
+            <button id="addToPrefBtn" class="btn btn-primary" style="display: none;">
+                <i class="fas fa-bookmark"></i> Add to preferences
             </button>
             <% } %>
 
-
             <br><br>
-
-
 
             <em class="mt-1"><%=postedOn%>, posted by <%
 
@@ -377,56 +404,45 @@
 
     <a href="#" class="back-to-top" id="myBtn"><i class="fa fa-chevron-up"></i></a>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Find the "Subscribe" nav link and attach the event listener
-            var navLink = document.querySelector('.nav-link.text-white');
-            if (navLink) {
-                navLink.addEventListener('click', function() {
-                    var subscriptionModal = new bootstrap.Modal(document.getElementById('subscriptionModal'));
-                    subscriptionModal.show();
-                });
-            }
-
-            // Check if the current URL contains "preferences.jsp"
-            if (window.location.href.includes('preferences.jsp')) {
-                updateNavbarItem('Preferences');
-            }
-
-            // Change the navbar element when the "Subscribe" button in the modal is clicked
-            var subscribeButton = document.getElementById('subscribeButton');
-            if (subscribeButton) {
-                subscribeButton.addEventListener('click', function() {
-                    updateNavbarItem('Preferences');
-                    var subscriptionModal = bootstrap.Modal.getInstance(document.getElementById('subscriptionModal'));
-                    subscriptionModal.hide();
-                });
-            } else {
-                console.error("Subscribe button not found");
-            }
-
-            function updateNavbarItem(newText) {
-                var navItem = document.querySelector('.nav-link.text-white');
-                if (navItem) {
-                    navItem.textContent = newText;
-                    navItem.setAttribute('id', 'preferencesLink');
-
-                    // Add the event listener for the "Preferences" nav item
-                    navItem.addEventListener('click', function(event) {
-                        if (event.target.textContent === 'Preferences') {
-                            // Hide any open modals before navigating
-                            var openModals = document.querySelectorAll('.modal.show');
-                            openModals.forEach(function(modal) {
-                                var modalInstance = bootstrap.Modal.getInstance(modal);
-                                modalInstance.hide();
-                            });
-
-                            window.location.href = 'preferences.jsp';
-                        }
-                    });
-                }
-            }
+        document.getElementById('subscriptionModal').addEventListener('hidden.bs.modal', function () {
+            document.querySelector('.btn-close').setAttribute('data-bs-dismiss', 'modal');
         });
 
+        async function fetchSubscriptionStatus() {
+            const userId = '<%= session.getAttribute("userId") %>';
+            const response = await fetch('checkSubscriptionStatus.jsp?user_id=' + userId, { method: 'POST' });
+
+            if (response.ok) {
+                const subscriptionStatus = await response.json();
+                return subscriptionStatus.isSubscribed;
+            } else {
+                console.error("Error fetching subscription status:", response.statusText);
+                throw new Error(response.statusText);
+            }
+        }
+
+        subscribeButton.addEventListener('click', async function () {
+            console.log("Subscribe button clicked");
+            try {
+                const userId = '<%= session.getAttribute("userId") %>';
+                const response = await fetch('subscribeUser.jsp?user_id=' + userId, { method: 'POST' });
+
+                if (response.ok) {
+                    const updateResult = await response.json();
+                    console.log("Update result:", updateResult);
+
+                    if (updateResult.result === 'success') {
+                        updateUIBasedOnSubscriptionStatus();
+                        var subscriptionModal = bootstrap.Modal.getInstance(document.getElementById('subscriptionModal'));
+                        subscriptionModal.hide();
+                    }
+                } else {
+                    console.error("Failed to update subscription status");
+                }
+            } catch (error) {
+                console.error("Error:", error.message);
+            }
+        });
 
     </script>
 
