@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="553ade07-8783-4310-a30f-0cbdfb1a98b8" name="Changes" comment="preference done">
+    <list default="true" id="553ade07-8783-4310-a30f-0cbdfb1a98b8" name="Changes" comment="added authorForm- frontend only">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/News.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/News.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/displayComments.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/displayComments.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -299,6 +297,8 @@
       <workItem from="1683628985870" duration="698000" />
       <workItem from="1683642298890" duration="14911000" />
       <workItem from="1683706890935" duration="14650000" />
+      <workItem from="1683738146585" duration="801000" />
+      <workItem from="1683786584331" duration="2100000" />
     </task>
     <task id="LOCAL-00001" summary="1st commit- error in seeNews">
       <created>1680435768422</created>
@@ -391,7 +391,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683719965782</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="added authorForm- frontend only">
+      <created>1683738478725</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1683738478725</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -435,6 +442,7 @@
     <MESSAGE value="solved some bugs and added back to top button" />
     <MESSAGE value="added password encryption but reference bug" />
     <MESSAGE value="preference done" />
-    <option name="LAST_COMMIT_MESSAGE" value="preference done" />
+    <MESSAGE value="added authorForm- frontend only" />
+    <option name="LAST_COMMIT_MESSAGE" value="added authorForm- frontend only" />
   </component>
 </project>
