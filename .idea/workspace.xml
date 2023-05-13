@@ -4,8 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="553ade07-8783-4310-a30f-0cbdfb1a98b8" name="Changes" comment="added authorForm- frontend only">
+    <list default="true" id="553ade07-8783-4310-a30f-0cbdfb1a98b8" name="Changes" comment="modified user-&gt;author procedure">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/News.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/News.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/login.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +102,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.editor&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -230,6 +236,9 @@
     </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\gogul\AppData\Roaming\Subversion</configuration>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="553ade07-8783-4310-a30f-0cbdfb1a98b8" name="Changes" comment="" />
@@ -298,7 +307,13 @@
       <workItem from="1683642298890" duration="14911000" />
       <workItem from="1683706890935" duration="14650000" />
       <workItem from="1683738146585" duration="801000" />
-      <workItem from="1683786584331" duration="2100000" />
+      <workItem from="1683786584331" duration="2864000" />
+      <workItem from="1683798292701" duration="156000" />
+      <workItem from="1683798558256" duration="2182000" />
+      <workItem from="1683812626073" duration="279000" />
+      <workItem from="1683812950542" duration="403000" />
+      <workItem from="1683966284536" duration="47000" />
+      <workItem from="1683966375226" duration="6648000" />
     </task>
     <task id="LOCAL-00001" summary="1st commit- error in seeNews">
       <created>1680435768422</created>
@@ -398,7 +413,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683738478725</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="fixed remove preference bug">
+      <created>1683788733078</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1683788733078</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -428,6 +450,8 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="1st commit" />
     <MESSAGE value="1st commit- error in seeNews" />
     <MESSAGE value="2nd commit- cannot login from the main news page" />
@@ -443,6 +467,9 @@
     <MESSAGE value="added password encryption but reference bug" />
     <MESSAGE value="preference done" />
     <MESSAGE value="added authorForm- frontend only" />
-    <option name="LAST_COMMIT_MESSAGE" value="added authorForm- frontend only" />
+    <MESSAGE value="fixed remove preference bug" />
+    <MESSAGE value="modified user-&gt;author procedure" />
+    <option name="LAST_COMMIT_MESSAGE" value="modified user-&gt;author procedure" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
 </project>

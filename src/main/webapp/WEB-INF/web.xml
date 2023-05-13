@@ -11,4 +11,18 @@
     <welcome-file-list>
         <welcome-file>News.jsp</welcome-file>
     </welcome-file-list>
+    <servlet>
+        <servlet-name>handleAuthorForm</servlet-name>
+        <jsp-file>/handleAuthorForm.jsp</jsp-file>
+        <multipart-config>
+            <location>/tmp</location>
+            <max-file-size>20848820</max-file-size> <!-- approx 20MB -->
+            <max-request-size>418018841</max-request-size> <!-- approx 2 x 20MB -->
+            <file-size-threshold>1048576</file-size-threshold> <!-- approx 1MB -->
+        </multipart-config>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>handleAuthorForm</servlet-name>
+        <url-pattern>/handleAuthorForm</url-pattern>
+    </servlet-mapping>
 </web-app>

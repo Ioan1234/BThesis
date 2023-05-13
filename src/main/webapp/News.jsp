@@ -70,8 +70,10 @@
 
                             ResultSet findUserRESULT = findUser.executeQuery();
                             findUserRESULT.next();
-                            int userId = findUserRESULT.getInt("user_id");
-                            session.setAttribute("userId", userId);
+                            if(!session.getAttribute("accountType").equals("author")) {
+                                int userId = findUserRESULT.getInt("user_id");
+                                session.setAttribute("userId", userId);
+                            }
 
                             out.println("<strong>" + findUserRESULT.getString("surname") + " " + findUserRESULT.getString("name") + " - " + session.getAttribute("accountType") + "</strong>");
                         }

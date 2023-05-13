@@ -26,6 +26,15 @@
         throw new RuntimeException(e);
     }
 } %>
+<%
+    String message = (String) request.getAttribute("msg");
+    if(message != null){
+%>
+<p><%= message %></p>
+<%
+    }
+%>
+
 
 
 <%
@@ -49,18 +58,18 @@
         }
     // Hash the password from the request
 
-        if ("POST".equals(request.getMethod())) {
+    if ("POST".equals(request.getMethod())) {
+        email = request.getParameter("email");
+        password = request.getParameter("password");
 
-            email = request.getParameter("email");
-            password = request.getParameter("password");
+        if (password != null && !password.isEmpty()) {
             hashedPassword = hashPassword(password);
             if (request.getParameter("from") != null) {
                 redirectPage = request.getParameter("from");
             }
 
 
-
-            PreparedStatement stmt = conn.prepareStatement("SELECT email, password FROM users");
+            PreparedStatement stmt = conn.prepareStatement("SELECT email, password FROM users where active = 1");
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -73,7 +82,7 @@
             }
 
             if (!found) {
-                PreparedStatement authorList = conn.prepareStatement("Select email, password from authors");
+                PreparedStatement authorList = conn.prepareStatement("Select email, password from authors where state_of_author= 1");
                 ResultSet authorListRESULT = authorList.executeQuery();
 
                 while (authorListRESULT.next()) {
@@ -91,6 +100,7 @@
                 msg = "Wrong email or password!";
             }
         }
+    }
 
         if (msg.equals("Authentication successful.")) {
             session.setAttribute("email", email);
@@ -161,6 +171,7 @@
                                     <input type="password" id="form3Example1cg" class="form-control form-control-lg" name="password" required />
                                     <label class="form-label" for="form3Example1cg">Your Password</label>
                                 </div>
+
 
                                 <div class="d-flex justify-content-center">
                                     <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body" name="submit">Login</button>
