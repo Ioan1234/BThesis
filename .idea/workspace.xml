@@ -4,14 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="553ade07-8783-4310-a30f-0cbdfb1a98b8" name="Changes" comment="modified user-&gt;author procedure">
+    <list default="true" id="553ade07-8783-4310-a30f-0cbdfb1a98b8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/entities/JavaBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/project/entities/JavaBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/entities/News.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/project/entities/News.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/News.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/News.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/add_draft.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/add_draft.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/css/utils.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/css/utils.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/deleteComment.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/deleteComment.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/displayComments.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/displayComments.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/javascript/scrips.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/javascript/scrips.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/login.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/seeNews.jsp" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,8 +58,8 @@
       <list>
         <option value="CSS File" />
         <option value="JavaScript File" />
-        <option value="Class" />
         <option value="Jsp File" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -75,6 +85,9 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\php\php.exe" />
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectId" id="2Np12mRcNAg4N8l2CzIxp9aRfKc" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
@@ -83,34 +96,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;database.data.extractors.current.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;ppppp&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/gogul/IdeaProjects/project&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
+    "database.data.extractors.current.id": "Comma-separated (CSV)_id",
+    "git-widget-placeholder": "ppppp",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/gogul/IdeaProjects/tttt",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\gogul\IdeaProjects\project\src\main\webapp" />
@@ -314,6 +327,96 @@
       <workItem from="1683812950542" duration="403000" />
       <workItem from="1683966284536" duration="47000" />
       <workItem from="1683966375226" duration="6648000" />
+      <workItem from="1683973891651" duration="97000" />
+      <workItem from="1683976033826" duration="112000" />
+      <workItem from="1683989553644" duration="9597000" />
+      <workItem from="1684057929925" duration="13311000" />
+      <workItem from="1684078351524" duration="4468000" />
+      <workItem from="1684089466706" duration="1833000" />
+      <workItem from="1684091510256" duration="129000" />
+      <workItem from="1684156169813" duration="1136000" />
+      <workItem from="1684158488024" duration="1526000" />
+      <workItem from="1684161675185" duration="6511000" />
+      <workItem from="1684171823799" duration="6947000" />
+      <workItem from="1684225708475" duration="438000" />
+      <workItem from="1684229163919" duration="2376000" />
+      <workItem from="1684233678363" duration="1011000" />
+      <workItem from="1685178361406" duration="20000" />
+      <workItem from="1685178485706" duration="584000" />
+      <workItem from="1685179416798" duration="24749000" />
+      <workItem from="1685266593565" duration="3691000" />
+      <workItem from="1685271772525" duration="7253000" />
+      <workItem from="1685286973979" duration="14613000" />
+      <workItem from="1685344778530" duration="3490000" />
+      <workItem from="1685362887050" duration="178000" />
+      <workItem from="1685363097123" duration="17407000" />
+      <workItem from="1685385578781" duration="745000" />
+      <workItem from="1685443843509" duration="733000" />
+      <workItem from="1685450772867" duration="93000" />
+      <workItem from="1685456306669" duration="8152000" />
+      <workItem from="1685467682557" duration="2503000" />
+      <workItem from="1685517254627" duration="1621000" />
+      <workItem from="1685535082914" duration="5477000" />
+      <workItem from="1685545361271" duration="75000" />
+      <workItem from="1685545474592" duration="6492000" />
+      <workItem from="1685612597966" duration="36527000" />
+      <workItem from="1685690952043" duration="8704000" />
+      <workItem from="1685700957073" duration="5050000" />
+      <workItem from="1685721456387" duration="869000" />
+      <workItem from="1685722378571" duration="3283000" />
+      <workItem from="1685726363329" duration="9726000" />
+      <workItem from="1685778575113" duration="36058000" />
+      <workItem from="1685873312971" duration="6424000" />
+      <workItem from="1685900008472" duration="6257000" />
+      <workItem from="1685906824175" duration="325000" />
+      <workItem from="1685957184125" duration="4089000" />
+      <workItem from="1685987327457" duration="7405000" />
+      <workItem from="1686042358987" duration="8460000" />
+      <workItem from="1686052122404" duration="620000" />
+      <workItem from="1686059646185" duration="2594000" />
+      <workItem from="1686078719972" duration="673000" />
+      <workItem from="1686079422941" duration="5205000" />
+      <workItem from="1686128542310" duration="16464000" />
+      <workItem from="1686149512344" duration="133000" />
+      <workItem from="1686149801614" duration="107000" />
+      <workItem from="1686158656547" duration="667000" />
+      <workItem from="1686161067250" duration="4811000" />
+      <workItem from="1686171199514" duration="465000" />
+      <workItem from="1686215271513" duration="7593000" />
+      <workItem from="1686303428837" duration="940000" />
+      <workItem from="1686475754967" duration="33000" />
+      <workItem from="1686475807338" duration="11302000" />
+      <workItem from="1686490431646" duration="841000" />
+      <workItem from="1686650900878" duration="39000" />
+      <workItem from="1686650964107" duration="382000" />
+      <workItem from="1686652306005" duration="326000" />
+      <workItem from="1686653654426" duration="60000" />
+      <workItem from="1686655885888" duration="127000" />
+      <workItem from="1686658284991" duration="325000" />
+      <workItem from="1686658678615" duration="23000" />
+      <workItem from="1686659450235" duration="131000" />
+      <workItem from="1686659967762" duration="130000" />
+      <workItem from="1686660250683" duration="723000" />
+      <workItem from="1686661356581" duration="44000" />
+      <workItem from="1686663400032" duration="529000" />
+      <workItem from="1686664274335" duration="403000" />
+      <workItem from="1686665655695" duration="23000" />
+      <workItem from="1686666573603" duration="726000" />
+      <workItem from="1686669976408" duration="1622000" />
+      <workItem from="1687086574860" duration="3122000" />
+      <workItem from="1687095854718" duration="2904000" />
+      <workItem from="1687101703350" duration="6794000" />
+      <workItem from="1687175300014" duration="229000" />
+      <workItem from="1687175556402" duration="17788000" />
+      <workItem from="1687254610722" duration="615000" />
+      <workItem from="1687335212370" duration="58000" />
+      <workItem from="1687335477735" duration="16928000" />
+      <workItem from="1687367347902" duration="734000" />
+      <workItem from="1687368710587" duration="135000" />
+      <workItem from="1687369780328" duration="929000" />
+      <workItem from="1687425233907" duration="93000" />
+      <workItem from="1687550010323" duration="107000" />
+      <workItem from="1687550146530" duration="817000" />
     </task>
     <task id="LOCAL-00001" summary="1st commit- error in seeNews">
       <created>1680435768422</created>
@@ -420,7 +523,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683788733078</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="modified user-&gt;author procedure">
+      <created>1683973936087</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1683973936087</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -471,5 +581,22 @@
     <MESSAGE value="modified user-&gt;author procedure" />
     <option name="LAST_COMMIT_MESSAGE" value="modified user-&gt;author procedure" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory">
+        <watch expression="request.getParameter(&quot;postDraft&quot;)" language="JAVA" />
+        <watch expression="request.getParameter(&quot;removeImage&quot;)" language="JAVA" />
+        <watch expression="request.getParameter(&quot;saveDraft&quot;)" language="JAVA" />
+        <watch expression="request.getParameter(&quot;deleteDraft&quot;)" language="JAVA" />
+        <watch expression="stateOfAuthor" language="JSP" />
+        <watch expression="session.getAttribute(&quot;accountType&quot;)" language="JSP" />
+        <watch expression="draftCount" language="JSP" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

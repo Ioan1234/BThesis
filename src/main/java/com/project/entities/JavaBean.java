@@ -1,11 +1,12 @@
 package com.project.entities;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+
 public class JavaBean extends Connections{
     public ArrayList<News> getNews() throws SQLException{
 
@@ -39,4 +40,6 @@ public class JavaBean extends Connections{
 
         return news;
     }
+
+
 }

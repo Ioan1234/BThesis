@@ -31,7 +31,24 @@ dependencies {
   implementation 'javax.xml.parsers:jaxp-api:1.4.5'
   implementation 'org.json:json:20211205'
   implementation 'com.google.code.gson:gson:2.8.2'
-  implementation 'org.jsoup:jsoup:1.7.2'
+  implementation 'org.jsoup:jsoup:1.14.2'
+// https://mvnrepository.com/artifact/jakarta.mail/jakarta.mail-api
+  implementation 'jakarta.mail:jakarta.mail-api:2.1.0'
+// https://mvnrepository.com/artifact/jakarta.activation/jakarta.activation-api
+  implementation 'jakarta.activation:jakarta.activation-api:2.1.0'
+// https://mvnrepository.com/artifact/com.sun.mail/jakarta.mail
+  implementation 'com.sun.mail:jakarta.mail:2.0.1'
+// https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload
+  implementation 'commons-fileupload:commons-fileupload:1.5'
+// https://mvnrepository.com/artifact/commons-io/commons-io
+  implementation 'commons-io:commons-io:2.11.0'
+  // https://mvnrepository.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api
+  implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
+
+
+
+
+
 
 }
 

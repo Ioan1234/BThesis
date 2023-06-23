@@ -1,5 +1,5 @@
 package com.project.entities;
-import java.util.ArrayList;
+
 import java.util.Date;
 public class News {
     private int newsId;
@@ -21,6 +21,19 @@ public class News {
         this.newsAvailability = newsAvailability;
         this.isDraft = isDraft;
     }
+
+    public News(int newsId, String newsTitle, String contentJson) {
+        this.newsId = newsId;
+        this.newsTitle = newsTitle;
+        this.newsContent= contentJson.getBytes();
+
+    }
+
+    public News() {
+
+    }
+
+
 
     public int getNewsId() {
         return newsId;
@@ -52,5 +65,21 @@ public class News {
 
     public boolean isDraft() {
         return isDraft;
+    }
+
+    public void setNewsId(int newsId) {
+        this.newsId = newsId;
+    }
+
+    public void setNewsTitle(String newsTitle) {
+        this.newsTitle = newsTitle;
+    }
+
+    public void setNewsContent(byte[] newsContent) {
+        this.newsContent = newsContent;
+    }
+
+    public void setNewsAvailability(boolean newsAvailability) {
+        this.newsAvailability = newsAvailability;
     }
 }

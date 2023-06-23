@@ -357,48 +357,6 @@ window.addEventListener('DOMContentLoaded', async () => {
 
 
 
-
-
-
-$(document).ready(function() {
-    $("#myInput").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#myTable tr").each(function() {
-            var rowText = $(this).text().toLowerCase();
-            var matchIndex = rowText.indexOf(value);
-
-            if (matchIndex !== -1) {
-                // Remove existing highlights
-                $(this).find('.searchable .highlight').each(function() {
-                    $(this).replaceWith($(this).text());
-                });
-
-                // Highlight the matched text by adding a span element with a class
-                $(this).find('.searchable').each(function() {
-                    var cellHtml = $(this).html();
-                    var cellText = $(this).text().toLowerCase();
-                    var matchIndex = cellText.indexOf(value);
-
-                    if (matchIndex !== -1) {
-                        var matchedText = cellText.slice(matchIndex, matchIndex + value.length);
-                        var regex = new RegExp(escapeRegExp(matchedText), 'gi');
-                        var highlightedText = cellHtml.replace(regex, "<span class='highlight'>$&</span>");
-                        $(this).html(highlightedText);
-                    }
-                });
-
-                $(this).show();
-            }
-            else {
-                $(this).hide();
-            }
-        });
-    });
-});
-
-function escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-}
 document.addEventListener('DOMContentLoaded', function() {
     let mybutton = document.getElementById("myBtn");
 
@@ -419,35 +377,8 @@ document.addEventListener('DOMContentLoaded', function() {
         document.documentElement.scrollTop = 0;
     }
 });
-async function addToPreferences(userId, newsId, categoryId) {
-    try {
-        const response = await fetch('addPreference.jsp', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams({
-                user_id: userId,
-                news_id: newsId,
-                category_id: categoryId
-            })
-        });
 
-        if (response.ok) {
-            const result = await response.json();
 
-            if (result.status === 'success') {
-                displaySuccessMessage(document.body, 'Successfully added to preferences');
-            } else {
-                displayErrorMessage(document.body, result.message);
-            }
-        } else {
-            displayErrorMessage(document.body, 'Failed to add preference. Please try again.');
-        }
-    } catch (error) {
-        displayErrorMessage(document.body, error.message);
-    }
-}
 
 function displaySuccessMessage(targetElement, message) {
     const successMessage = document.createElement('div');
@@ -494,6 +425,20 @@ function displayErrorMessage(targetElement, message) {
         errorMessage.remove();
     }, 3000);
 }
+    function showCategoryPopup() {
+    // TODO: Replace with actual categories fetched from the database
+    const categories = [
+{id: 1, name: 'Category 1'},
+{id: 2, name: 'Category 2'},
+    ];
+    let popupContent = 'Select a category:<br>';
+    for (const category of categories) {
+    popupContent += `<a href="?category=${category.id}">${category.name}</a><br>`;
+}
+    const popupWindow = window.open("", "popupWindow", "width=200,height=100");
+    popupWindow.document.write(popupContent);
+}
+
 
 
 

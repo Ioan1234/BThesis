@@ -4,30 +4,12 @@
 <%@ page import = "org.json.simple.parser.JSONParser" %>
 <%@ page import = "org.json.simple.parser.*" %>
 <%@page import="java.io.FileReader"%>
+<%@ page import="com.project.entities.DatabaseConnector" %>
 
 <%
-  JSONParser jsonParser = new JSONParser();
-  JSONObject jsonObject = null;
-  try {
-    jsonObject = (JSONObject) jsonParser.parse(new FileReader("C:/Users/gogul/IdeaProjects/project/src/main/webapp/newjson.json"));
-  } catch (ParseException e) {
-    throw new RuntimeException(e);
-  }
-
-  String User = (String) jsonObject.get("username");
-  String Pass = (String) jsonObject.get("password");
-  String Driver = (String) jsonObject.get("driverName");
-  String Drive = (String) jsonObject.get("driver");
-  try {
-    Class.forName(Driver);
-  } catch (ClassNotFoundException e) {
-    throw new RuntimeException(e);
-  }
-  Connection conn = null;
+  Connection conn = DatabaseConnector.getConnection();
   PreparedStatement deleteComment = null;
   try {
-    conn = DriverManager.getConnection(Drive, User, Pass);
-    conn.setAutoCommit(false);
     int commentId = request.getParameter("comment_id") != null ? Integer.parseInt(request.getParameter("comment_id")) : 0;
 
     int currentUserId = (int) session.getAttribute("id");
