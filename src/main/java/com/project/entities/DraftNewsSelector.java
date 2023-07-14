@@ -14,7 +14,7 @@ public class DraftNewsSelector extends Connections {
     public ArrayList<News> getDraftNews() throws SQLException {
         Connection conn = Connections.getConnection();
 
-        String sql = "SELECT news_id, draft_id, news_title, news_posted_on, category_id, news_content, news_availability, is_draft FROM news WHERE is_draft = 1 ORDER BY news_id";
+        String sql = "SELECT n.news_id, n.draft_id, n.news_title, n.news_posted_on, n.category_id, n.news_content, n.news_availability, n.is_draft, a.surname, a.name FROM news n JOIN draft_authors da ON n.draft_id = da.draft_id JOIN authors a ON da.author_id = a.author_id WHERE n.is_draft = 1 ORDER BY n.news_id";
         PreparedStatement getDraftNews = conn.prepareStatement(sql);
         ResultSet getDraftNewsRESULT = getDraftNews.executeQuery();
 
@@ -29,13 +29,21 @@ public class DraftNewsSelector extends Connections {
             Date newsPostedOn = getDraftNewsRESULT.getDate("news_posted_on");
             boolean newsAvailability = getDraftNewsRESULT.getBoolean("news_availability");
             boolean isDraft = getDraftNewsRESULT.getBoolean("is_draft");
+            String authorName = getDraftNewsRESULT.getString("name");
+            String authorSurname = getDraftNewsRESULT.getString("surname");
+
+            Author author = new Author();
+            author.setName(authorName);
+            author.setSurname(authorSurname);
 
             News newsObj = new News(newsId, draftId, newsTitle, categoryId, newsContent, newsPostedOn, newsAvailability, isDraft);
+            newsObj.setAuthor(author);
             draftNews.add(newsObj);
         }
 
         return draftNews;
     }
+
     public Map<String, CategoryNewsPair> getCategorizedDraftNews() throws SQLException {
         Map<String, CategoryNewsPair> categorizedDraftNews = new LinkedHashMap<>();
         ArrayList<News> draftNews = this.getDraftNews();

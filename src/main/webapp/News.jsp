@@ -229,6 +229,11 @@
                                     <small>Posted on: <%=n.getNewsPostedOn()%></small>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-lg-12 text-nowrap text-left">
+                                    <small>Posted by: <%=n.getAuthor().getFullName()%></small>
+                                </div>
+                            </div>
                             <% if(session.getAttribute("accountType") != null && session.getAttribute("accountType").equals("admin") && n.isNewsAvailability()) { %>
                             <div class="row">
                                 <div class="col-lg-12 text-right">
@@ -241,6 +246,7 @@
                             <% } %>
                         </div>
                     </div>
+
                     <%
                             }
                         }
