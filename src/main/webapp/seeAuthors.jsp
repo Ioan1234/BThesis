@@ -16,14 +16,18 @@
 <%@ page import="java.io.InputStreamReader" %>
 
 <%
-    Connection conn = DatabaseConnector.getConnection();
+    Connection conn = null;
     PreparedStatement stmt = null;
     ResultSet rs = null;
-    String sql = "SELECT DISTINCT a.author_id, a.surname, a.name, a.profile_picture_url " +
-            "FROM authors a, draft_authors da " +
-            "WHERE a.author_id = da.author_id";
-    stmt = conn.prepareStatement(sql);
-    rs = stmt.executeQuery();
+    try {
+        conn = DatabaseConnector.getConnection();
+        String sql = "SELECT DISTINCT a.author_id, a.surname, a.name, a.profile_picture_url " +
+                "FROM authors a " +
+                "JOIN draft_authors da ON a.author_id = da.author_id " +
+                "JOIN news n ON da.draft_id = n.draft_id " +
+                "WHERE n.is_draft = 1";
+        stmt = conn.prepareStatement(sql);
+        rs = stmt.executeQuery();
 %>
 
 <!DOCTYPE html>
@@ -32,7 +36,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Authors</title>
-    <title>News</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/utils.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -157,7 +160,6 @@
     <p class="h3 my-5 text-center">Authors</p>
     <div class="row">  <!-- Add a row here -->
         <% while (rs.next()) { %>
-        <!-- Add col class here for each card. Adjust the number as per your need. For instance, col-lg-4 will create 3 cards per row in large screens. -->
         <div class="col-lg-4">
             <div class="card" style="width: 18rem;">
                 <img class="card-img-top rounded-circle" src="imageServlet?author_id=<%= rs.getInt("author_id") %>" alt="Author profile picture">
@@ -168,7 +170,7 @@
             </div>
         </div>
         <% } %>
-    </div>  <!-- End of row -->
+    </div>
 </div>
 
 
@@ -382,14 +384,27 @@
 </html>
 
 <%
-    // Close the result set, statement, and the connection
-    if (rs != null) {
-        try { rs.close(); } catch (SQLException ignore) {}
-    }
-    if (stmt != null) {
-        try { stmt.close(); } catch (SQLException ignore) {}
-    }
-    if (conn != null) {
-        try { conn.close(); } catch (SQLException ignore) {}
+    } finally {
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if (stmt != null) {
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 %>

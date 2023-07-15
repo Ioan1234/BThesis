@@ -1,32 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@page import="com.project.entities.News"%>
-<%@ page import = "org.json.simple.JSONObject" %>
-<%@ page import = "org.json.simple.parser.JSONParser" %>
-<%@ page import = "org.json.simple.parser.*" %>
-<%@page import="java.io.FileReader"%>
-<%@ page import = "java.sql.*"%>
+<%@ page import="com.project.entities.News" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page import="com.project.entities.DatabaseConnector" %>
-<%@ page import="java.net.URLDecoder" %>
-<%@ page import="com.project.entities.CategoryNewsPair" %>
-<%@ page import="java.util.*" %>
-
-<%
-
-    Connection conn = DatabaseConnector.getConnection();
-
-    Cookie[] cookies = request.getCookies();
-    if (cookies != null) {
-        for (Cookie cookie : cookies) {
-            if ("authorApproved".equals(cookie.getName()) && String.valueOf(session.getAttribute("id")).equals(cookie.getValue())) {
-                out.print("Congratulations! The admin approved your request to become an author");
-                cookie.setMaxAge(0); // Delete the cookie
-                response.addCookie(cookie);
-                break;
-            }
-        }
-    }
-%>
-
+<%@ page import="java.sql.Connection" %>
+<%@ page import="java.sql.PreparedStatement" %>
+<%@ page import="java.sql.ResultSet" %>
+<%Connection conn = DatabaseConnector.getConnection();%>
 
 <!DOCTYPE html>
 <html   style="position: relative;
@@ -44,69 +23,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- assuming you have the javascript files in a js folder -->
     <script src="javascript/jquery.highlight.js"></script>
 
     <script src="javascript/scrips.js"></script>
-<style>
-    .dropdown {
-        position: relative;
-        display: inline-block;
-    }
 
-    .filter-btn {
-        background-color: #0096FF;
-        color: white;
-        font-size: 18px;
-        border-radius: 50px;
-        padding: 10px 20px;
-        box-shadow: 0 0 0 2px white;
-    }
-
-    .filter-btn:hover {
-        background-color: #FF3131;
-    }
-
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 1;
-        left: 0;
-        right: 0;
-    }
-
-    .dropdown-content p {
-        color: white;
-        text-decoration: none;
-        display: block;
-        background-color: #0096FF;
-        margin: 2px;
-        padding: 10px;
-        font-size: 18px;
-        cursor: pointer;
-        text-align: center;
-    }
-
-
-    .dropdown-content p:hover {
-        background-color: #FF3131;
-    }
-
-    .dropdown-content p i {
-        float: right;
-        visibility: hidden;
-    }
-
-    .dropdown-content p:hover i {
-        visibility: visible;
-    }
-
-    .dropdown:hover .dropdown-content {
-        display: block;
-    }
-
-</style>
 </head>
 <body style="margin-bottom: 200px; ">
 
@@ -231,63 +152,15 @@
 </div>
 <jsp:useBean id="obj" class="com.project.entities.DraftNewsSelector"/>
 <%
-    List<String> allCategories = obj.getAllCategories();
-    List<String> allAuthors = obj.getAllAuthors();
+    String selectedCategory = request.getParameter("selected_category");
+    List<News> newsList = obj.getNewsByCategory(selectedCategory);
 %>
 <div class="container mt-5">
     <div class="row">
         <div class="col-lg-9">
-            <%if (session.getAttribute("accountType")!=null){%>
-            <div class="d-flex justify-content-center my-3">
-                <div class="dropdown mx-2">
-                    <button class="filter-btn">Filter by Category<i class="fas fa-filter"></i></button>
-
-                    <div class="dropdown-content">
-                        <% for(String category : allCategories){ %>
-                        <p onclick="handleCategorySelection('<%=category%>')"><%=category%><i class="fas fa-arrow-right"></i></p>
-                        <% } %>
-                    </div>
-                </div>
-
-                <div class="dropdown mx-2">
-                    <button class="filter-btn">Filter by Author<i class="fas fa-filter"></i></button>
-                    <div class="dropdown-content">
-                        <% for(String author : allAuthors){ %>
-                        <p onclick="handleAuthorSelection('<%=author%>')"><%=author%><i class="fas fa-arrow-right"></i></p>
-                        <% } %>
-                    </div>
-                </div>
-            </div>
-            <%}%>
-            <%
-                Map<String, CategoryNewsPair> categorizedDraftNews = obj.getCategorizedDraftNews();
-
-                for (Map.Entry<String, CategoryNewsPair> entry : categorizedDraftNews.entrySet()) {
-                    String currentCategory = entry.getKey();
-                    CategoryNewsPair categoryNewsPair = entry.getValue();
-                    ArrayList<News> newsList = categoryNewsPair.getNews();
-
-                    if ((session.getAttribute("accountType") != null && session.getAttribute("accountType").equals("admin")) || categoryNewsPair.isCategoryAvailability()) {
-            %>
             <div class="card w-100 mt-3">
-                <div class="card-header" data-category="<%=currentCategory%>" style="text-align: center; font-size: 1.5em; font-weight: bold;">
-                    <%=currentCategory%>
-                    <% if (!categoryNewsPair.isCategoryAvailability()) { %>
-                    (News category archived)
-                    <% } %>
-                    <% if(session.getAttribute("accountType") != null && session.getAttribute("accountType").equals("admin")) { %>
-                    <% if (categoryNewsPair.isCategoryAvailability()) { %>
-                    <form action="archiveCategory.jsp" method="post" style="display:inline;">
-                        <input type="hidden" name="category_name" value="<%=currentCategory%>" />
-                        <button type="submit" class="btn btn-sm btn-outline-dark">Archive Category</button>
-                    </form>
-                    <% } else { %>
-                    <form action="unarchiveCategory.jsp" method="post" style="display:inline;">
-                        <input type="hidden" name="category_name" value="<%=currentCategory%>" />
-                        <button type="submit" class="btn btn-sm btn-outline-dark">Unarchive Category</button>
-                    </form>
-                    <% } %>
-                    <% } %>
+                <div class="card-header" style="text-align: center; font-size: 1.5em; font-weight: bold;">
+                    <%=selectedCategory%>
                 </div>
                 <div class="card-body">
                     <%
@@ -323,15 +196,12 @@
                             <% } %>
                         </div>
                     </div>
-
                     <%
                             }
                         }
                     %>
                 </div>
             </div>
-            <% } %>
-            <% } %>
         </div>
         <div class="col-lg-3">
             <div class="card w-100 mt-3">
@@ -355,10 +225,7 @@
     </div>
 </div>
 
-
-
-
-    <a href="#" class="back-to-top"  id="myBtn"><i class="fa fa-chevron-up"></i></a>
+<a href="#" class="back-to-top"  id="myBtn"><i class="fa fa-chevron-up"></i></a>
 <script>
     document.getElementById('subscriptionModal').addEventListener('hidden.bs.modal', function () {
         document.querySelector('.btn-close').setAttribute('data-bs-dismiss', 'modal');
@@ -507,12 +374,8 @@
             }
         });
     });
-    function handleAuthorSelection(value) {
-        window.location.href = 'filteredNewsByAuthor.jsp?selected_author=' + encodeURIComponent(value);
-    }
-    function handleCategorySelection(value) {
-        window.location.href = 'filteredNewsByCategory.jsp?selected_category=' + value;
-    }
+
+
 
 
 </script>

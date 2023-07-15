@@ -70,14 +70,3 @@
 .container {
     max-width: 1000px;
 }
-.dropdown-content {
-    display: none;
-    background-color: #0096FF;
-    color: white;
-}
-.dropdown-content a:hover {
-    color: #FF3131;
-}
-.dropdown:hover .dropdown-content {
-    display: block;
-}

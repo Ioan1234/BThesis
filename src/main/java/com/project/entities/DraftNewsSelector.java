@@ -4,17 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class DraftNewsSelector extends Connections {
 
     public ArrayList<News> getDraftNews() throws SQLException {
         Connection conn = Connections.getConnection();
 
-        String sql = "SELECT n.news_id, n.draft_id, n.news_title, n.news_posted_on, n.category_id, n.news_content, n.news_availability, n.is_draft, a.surname, a.name FROM news n JOIN draft_authors da ON n.draft_id = da.draft_id JOIN authors a ON da.author_id = a.author_id WHERE n.is_draft = 1 ORDER BY n.news_id";
+        String sql = "SELECT n.news_id, n.draft_id, n.news_title, n.news_posted_on, n.category_id, n.news_content, n.news_availability, n.is_draft, a.surname, a.name FROM news n JOIN draft_authors da ON n.draft_id = da.draft_id JOIN authors a ON da.author_id = a.author_id WHERE n.is_draft = 1 ORDER BY n.news_posted_on DESC";
         PreparedStatement getDraftNews = conn.prepareStatement(sql);
         ResultSet getDraftNewsRESULT = getDraftNews.executeQuery();
 
@@ -89,6 +86,113 @@ public class DraftNewsSelector extends Connections {
 
         return hotNews;
     }
+    public List<String> getAllCategories() throws SQLException {
+        List<String> categories = new ArrayList<>();
+        String sql = "SELECT DISTINCT category_name FROM categories WHERE category_availability=1";
+        PreparedStatement stmt = getConnection().prepareStatement(sql);
+        ResultSet resultSet = stmt.executeQuery();
+
+        while (resultSet.next()) {
+            categories.add(resultSet.getString(1));
+        }
+
+        return categories;
+    }
+    public List<News> getNewsByCategory(String category) throws SQLException {
+        List<News> newsList = new ArrayList<>();
+        Connection conn = Connections.getConnection();
+
+        String sql = "SELECT n.news_id, n.draft_id, n.news_title, n.news_posted_on, n.category_id, n.news_content, n.news_availability, n.is_draft, a.surname, a.name FROM news n JOIN draft_authors da ON n.draft_id = da.draft_id JOIN authors a ON da.author_id = a.author_id JOIN categories c ON n.category_id = c.category_id WHERE c.category_name = ? ORDER BY n.news_id";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, category);
+        ResultSet resultSet = stmt.executeQuery();
+
+        while (resultSet.next()) {
+            int newsId = resultSet.getInt("news_id");
+            int draftId = resultSet.getInt("draft_id");
+            String newsTitle = resultSet.getString("news_title");
+            int categoryId = resultSet.getInt("category_id");
+            byte[] newsContent = resultSet.getBytes("news_content");
+            Date newsPostedOn = resultSet.getDate("news_posted_on");
+            boolean newsAvailability = resultSet.getBoolean("news_availability");
+            boolean isDraft = resultSet.getBoolean("is_draft");
+            String authorName = resultSet.getString("name");
+            String authorSurname = resultSet.getString("surname");
+
+            Author author = new Author();
+            author.setName(authorName);
+            author.setSurname(authorSurname);
+
+            News newsObj = new News(newsId, draftId, newsTitle, categoryId, newsContent, newsPostedOn, newsAvailability, isDraft);
+            newsObj.setAuthor(author);
+            newsList.add(newsObj);
+        }
+
+        return newsList;
+    }
+    public List<String> getAllAuthors() throws SQLException {
+        List<String> authorsList = new ArrayList<>();
+        String sql = "SELECT DISTINCT a.name, a.surname " +
+                "FROM authors a " +
+                "INNER JOIN draft_authors da ON a.author_id = da.author_id " +
+                "INNER JOIN draft d ON da.draft_id = d.draft_id " +
+                "INNER JOIN news n ON d.draft_id = n.draft_id WHERE news_availability=1";
+        PreparedStatement stmt = getConnection().prepareStatement(sql);
+        ResultSet resultSet = stmt.executeQuery();
+
+        while (resultSet.next()) {
+            authorsList.add(resultSet.getString("name") + " " + resultSet.getString("surname"));
+        }
+
+        return authorsList;
+    }
+    public Map<String, List<News>> getCategorizedNewsByAuthor(String author) throws SQLException {
+        Map<String, List<News>> categorizedNewsMap = new HashMap<>();
+        String[] authorNames = author.split(" "); // assuming author is in "name surname" format
+
+        String sql = "SELECT n.* " +
+                "FROM news n " +
+                "INNER JOIN draft d ON n.draft_id = d.draft_id " +
+                "INNER JOIN draft_authors da ON d.draft_id = da.draft_id " +
+                "INNER JOIN authors a ON da.author_id = a.author_id " +
+                "WHERE a.name = ? AND a.surname = ?";
+        PreparedStatement stmt = getConnection().prepareStatement(sql);
+        stmt.setString(1, authorNames[0]);
+        stmt.setString(2, authorNames[1]);
+
+        ResultSet resultSet = stmt.executeQuery();
+
+        while (resultSet.next()) {
+            int newsId = resultSet.getInt("news_id");
+            int draftId = resultSet.getInt("draft_id");
+            String newsTitle = resultSet.getString("news_title");
+            int categoryId = resultSet.getInt("category_id");
+            byte[] newsContent = resultSet.getBytes("news_content");
+            Date newsPostedOn = resultSet.getDate("news_posted_on");
+            boolean newsAvailability = resultSet.getBoolean("news_availability");
+            boolean isDraft = resultSet.getBoolean("is_draft");
+
+            News newsObj = new News(newsId, draftId, newsTitle, categoryId, newsContent, newsPostedOn, newsAvailability, isDraft);
+
+            // Getting the category name for the current news item
+            String categorySql = "SELECT category_name FROM categories WHERE category_id = ?";
+            PreparedStatement categoryStmt = getConnection().prepareStatement(categorySql);
+            categoryStmt.setInt(1, categoryId);
+
+            ResultSet categoryResultSet = categoryStmt.executeQuery();
+            if (categoryResultSet.next()) {
+                String categoryName = categoryResultSet.getString("category_name");
+
+                // Add the news item to its category's list
+                categorizedNewsMap.computeIfAbsent(categoryName, k -> new ArrayList<>()).add(newsObj);
+            }
+        }
+
+        return categorizedNewsMap;
+    }
+
+
+
 
 
 }
