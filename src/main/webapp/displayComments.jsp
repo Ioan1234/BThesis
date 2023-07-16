@@ -86,7 +86,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!-- assuming you have the javascript files in a js folder -->
-    <script src="javascript/jquery.min.js"></script>
     <script src="javascript/jquery.highlight.js"></script>
 
     <script src="javascript/scrips.js"></script>

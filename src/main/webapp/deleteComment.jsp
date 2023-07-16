@@ -9,6 +9,8 @@
 <%
   Connection conn = DatabaseConnector.getConnection();
   PreparedStatement deleteComment = null;
+  conn.setAutoCommit(false);
+
   try {
     int commentId = request.getParameter("comment_id") != null ? Integer.parseInt(request.getParameter("comment_id")) : 0;
 

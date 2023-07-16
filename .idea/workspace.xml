@@ -5,12 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="553ade07-8783-4310-a30f-0cbdfb1a98b8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/entities/DraftNewsSelector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/project/entities/DraftNewsSelector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/News.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/News.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/css/utils.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/css/utils.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/seeAuthors.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/seeAuthors.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/servlets/ReportFakeNewsServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/project/servlets/ReportFakeNewsServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/deleteComment.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/deleteComment.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/displayComments.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/displayComments.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -419,7 +417,11 @@
       <workItem from="1689254310466" duration="308000" />
       <workItem from="1689327278270" duration="8613000" />
       <workItem from="1689338084195" duration="2841000" />
-      <workItem from="1689412602365" duration="10593000" />
+      <workItem from="1689412602365" duration="10644000" />
+      <workItem from="1689435488210" duration="157000" />
+      <workItem from="1689435674927" duration="27000" />
+      <workItem from="1689437468892" duration="232000" />
+      <workItem from="1689526477121" duration="1021000" />
     </task>
     <task id="LOCAL-00001" summary="1st commit- error in seeNews">
       <created>1680435768422</created>
@@ -549,7 +551,15 @@
       <option name="project" value="LOCAL" />
       <updated>1689338891870</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="added filtering function">
+      <option name="closed" value="true" />
+      <created>1689425026177</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1689425026177</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -600,7 +610,8 @@
     <MESSAGE value="modified user-&gt;author procedure" />
     <MESSAGE value="final version" />
     <MESSAGE value="author name added" />
-    <option name="LAST_COMMIT_MESSAGE" value="author name added" />
+    <MESSAGE value="added filtering function" />
+    <option name="LAST_COMMIT_MESSAGE" value="added filtering function" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
